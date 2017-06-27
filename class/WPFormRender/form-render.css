@@ -1,0 +1,17 @@
+.widefat.multyple {
+	width: 90%;
+	float: left;
+}
+.widefat.multyple + .dashicons {
+	float: right;
+}
+.multyple + .dashicons, .multyple + .dashicons:before {
+	width: 26px;
+	height: 28px;
+    line-height: 32px;
+    color: green;
+    cursor: pointer;
+}
+.multyple + .dashicons-minus, .multyple + .dashicons-minus:before {
+    color: tomato;
+}
