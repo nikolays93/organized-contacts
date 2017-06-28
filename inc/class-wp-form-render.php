@@ -3,12 +3,13 @@
  * Class Name: WPForm ( :: render )
  * Class URI: https://github.com/nikolays93/WPForm
  * Description: render forms as wordpress fields
- * Version: 1.3
+ * Version: 1.4
  * Author: NikolayS93
  * Author URI: https://vk.com/nikolays_93
  * License: GNU General Public License v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
+namespace PLUGIN_NAME;
 
 if ( ! defined( 'ABSPATH' ) )
   exit; // disable direct access
@@ -49,15 +50,19 @@ class WPForm {
   }
   
   /**
-   * EXPEREMENTAL! todo: add recursive handle
-   * @param  string  $option_name      
-   * @param  string  $sub_name         $option_name[$sub_name]
-   * @param  boolean $is_admin_options recursive split value array key with main array
-   * @return array                     installed options
+   * @todo: add recursive handle
+   * 
+   * @param  string   $option_name      
+   * @param  string   $sub_name         $option_name[$sub_name]
+   * @param  boolean  $is_admin_options recursive split value array key with main array
+   * @param  int|bool $postmeta         int = post_id for post meta, true = get post_id from global post
+   * @return array                      installed options
    */
   public static function active($option_name, $sub_name = false, $is_admin_options = false, $postmeta = false){
+    
     global $post;
 
+    /** get active values */
     if( $postmeta ){
       if( !is_int($postmeta) && !isset($post->ID) )
         return false;
@@ -69,15 +74,18 @@ class WPForm {
     else {
       $active = get_option( $option_name, array() );
     }
-    
+
+    /** get subvalue */
     if( $sub_name && isset($active[$sub_name]) && is_array($active[$sub_name]) )
       $active = $active[$sub_name];
     elseif( $sub_name && !isset($active[$sub_name]) )
       return false;
 
-    if(!is_array($active))
+    /** if active not found */
+    if( !isset($active) || !is_array($active) )
         return false;
 
+    /** sanitize admin values */
     if( $is_admin_options === true ){
       $result = array();
       foreach ($active as $key => $value) {
@@ -97,7 +105,6 @@ class WPForm {
     return $active;
   }
 
-  // * EXPEREMENTAL!
   protected static function set_defaults( $args, $is_table ){
     $default_args = array(
       'admin_page'  => false, // set true for auto detect
@@ -138,16 +145,154 @@ class WPForm {
       return $inputs;
 
     foreach ( $inputs as &$input ) {
-      $multyple = ( isset($input['multyple']) && $input['multyple'] !== false ) ? '[]' : '';
-
       if( isset($input['name']) )
-        $input['name'] = "{$option_name}[{$input['name']}]" . $multyple;
+        $input['name'] = "{$option_name}[{$input['name']}]";
       else
-        $input['name'] = "{$option_name}[{$input['id']}]" . $multyple;
+        $input['name'] = "{$option_name}[{$input['id']}]";
 
       $input['check_active'] = 'id';
     }
     return $inputs;
+  }
+
+  /**
+   * Render form items
+   * @param  boolean $render_data array with items ( id, name, type, options..)
+   * @param  array   $active      selected options from form items
+   * @param  boolean $is_table    is a table
+   * @param  array   $args        array of args (item_wrap, form_wrap, label_tag, hide_desc) @see $default_args
+   * @param  boolean $is_not_echo true = return, false = echo
+   * @return html                 return or echo
+   */
+  public static function render(
+    $render_data = false,
+    $active = array(),
+    $is_table = false,
+    $args = array(),
+    $is_not_echo = false){
+
+    $html = $hidden = array();
+
+    if( empty($render_data) ){
+      if( function_exists('is_wp_debug') && is_wp_debug() )
+        echo '<pre> Параметры формы не были переданы </pre>';
+      return false;
+    }
+    
+    if( isset($render_data['id']) )
+        $render_data = array($render_data);
+
+    if($active === false)
+      $active = array();
+    
+    $args = self::set_defaults( $args, $is_table );
+    if( $args['admin_page'] )
+      $render_data = self::admin_page_options( $render_data, $args['admin_page'] );
+
+    /**
+     * Template start
+     */
+    if($is_table)
+        $html[] = $args['form_wrap'][0];
+
+    foreach ( $render_data as $input ) {
+      $label   = _isset_false($input['label'], 1);
+      $before  = _isset_empty($input['before'], 1);
+      $after   = _isset_empty($input['after'], 1);
+      $default = _isset_false($input['default'], 1);
+      $value   = _isset_false($input['value']);
+      $check_active = _isset_false($input['check_active'], 1);
+      
+      if( $input['type'] != 'checkbox' && $input['type'] != 'radio' )
+        _isset_default( $input['placeholder'], $default );
+
+      $desc = _isset_false($input['desc'], 1);
+      if( ! $desc )
+        $desc = _isset_false($input['description'], 1);
+
+      if( !isset($input['name']) )
+          $input['name'] = _isset_empty($input['id']);
+
+      $input['id'] = str_replace('][', '_', $input['id']);
+      
+      /**
+       * set values
+       */
+      $active_name = $check_active ? $input[$check_active] : str_replace('[]', '', $input['name']);
+      $active_value = ( is_array($active) && sizeof($active) > 0 && isset($active[$active_name]) ) ?
+         $active[$active_name] : false;
+
+      $entry = '';
+      if($input['type'] == 'checkbox' || $input['type'] == 'radio'){
+        $entry = self::is_checked( $value, $active_value, $default );
+      }
+      elseif( $input['type'] == 'select' ){
+        $entry = ($active_value) ? $active_value : $default;
+      }
+      else {
+        // if text, textarea, number, email..
+        $entry = $active_value;
+        $placeholder = $default;
+      }
+
+      switch ($input['type']) {
+        case 'text':
+        case 'hidden':
+        case 'submit':
+        case 'button':
+        case 'number':
+        case 'email':
+          $func = 'render_text';
+          break;
+        
+        default:
+          $func = 'render_' . $input['type'];
+          break;
+      }
+      
+      $input_html = self::$func($input, $entry, $is_table, $label);
+
+      if( $desc ){
+        // todo: set tooltip
+        if( isset($args['hide_desc']) && $args['hide_desc'] === true )
+          $desc_html = "<div class='description' style='display: none;'>{$desc}</div>";
+        else
+          $desc_html = "<span class='description'>{$desc}</span>";
+      } else {
+        $desc_html = '';
+      }
+      
+      if(!$is_table){
+        $html[] = $before . $args['item_wrap'][0] . $input_html . $args['item_wrap'][1] . $after . $desc_html;
+      }
+      elseif( $input['type'] == 'hidden' ){
+        $hidden[] = $before . $input_html . $after;
+      }
+      elseif( $input['type'] == 'html' ){
+        $html[] = $args['form_wrap'][1];
+        $html[] = $before . $input_html . $after;
+        $html[] = $args['form_wrap'][0];
+      }
+      else {
+        $item = $before . $args['item_wrap'][0]. $input_html .$args['item_wrap'][1] . $after;
+
+        $html[] = "<tr id='{$input['id']}'>";
+        $html[] = "  <{$args['label_tag']} class='label'>{$label}</{$args['label_tag']}>";
+        $html[] = "  <td>";
+        $html[] = "    " .$item;
+        $html[] = $desc_html;
+        $html[] = "  </td>";
+        $html[] = "</tr>";
+      }
+    } // endforeach
+    if($is_table)
+      $html[] = $args['form_wrap'][1];
+
+    $result = implode("\n", $html) . "\n" . implode("\n", $hidden);
+    if( $is_not_echo )
+      return $result;
+    else
+      echo $result;
   }
 
   /**
@@ -188,264 +333,106 @@ class WPForm {
     }
   }
 
-  /**
-   * Render form items
-   * @param  boolean $render_data array with items ( id, name, type, options..)
-   * @param  array   $active      selected options from form items
-   * @param  boolean $is_table    is a table
-   * @param  array   $args        array of args (item_wrap, form_wrap, label_tag, hide_desc) @see $default_args
-   * @param  boolean $is_not_echo true = return, false = echo
-   * @return html                 return or echo
-   */
-  public static function render(
-    $render_data = false,
-    $active = array(),
-    $is_table = false,
-    $args = array(),
-    $is_not_echo = false){
+  public static function render_checkbox( $input, $checked, $is_table, $label = '' ){
+    $result = '';
 
-    wp_enqueue_style( 'form-render-css', ORG_URL . '/class/WPFormRender/form-render.css', false, '1.0' );
-    wp_enqueue_script( 'form-render-css', ORG_URL . '/class/WPFormRender/multyple.js', array('jquery'), '1.0', true );
+    if( empty($input['value']) )
+      $input['value'] = 'on';
 
-    $html = $hidden = array();
+    if( $checked )
+      $input['checked'] = 'true';
 
-    if( empty($render_data) ){
-      if( function_exists('is_wp_debug') && is_wp_debug() )
-        echo '<pre> Параметры формы не были переданы </pre>';
-      return false;
+    // if $clear_value === false dont use defaults (couse default + empty value = true)
+    $cv = self::$clear_value;
+    if( false !== $cv )
+      $result .= "<input name='{$input['name']}' type='hidden' value='{$cv}'>\n";
+
+    $result .= "<input";
+    foreach ($input as $attr => $val) {
+      if($val){
+        $attr = esc_attr($attr);
+        $val  = esc_attr($val);
+        $result .= " {$attr}='{$val}'";
+      }
     }
-    
-    if( isset($render_data['id']) )
-        $render_data = array($render_data);
+    $result .= ">";
 
-    if($active === false)
-      $active = array();
-    
-    $args = self::set_defaults( $args, $is_table );
-    if( $args['admin_page'] )
-      $render_data = self::admin_page_options( $render_data, $args['admin_page'] );
+    if(!$is_table && $label)
+      $result .= "<label for='{$input['id']}'> {$label} </label>";
 
-    /**
-     * Template start
-     */
-    if($is_table)
-        $html[] = $args['form_wrap'][0];
-
-    foreach ( $render_data as $input ) {
-      $before  = _isset_empty($input['before'], 1);
-      $after   = _isset_empty($input['after'], 1);
-      $label   = _isset_false($input['label'], 1);
-      $default = _isset_false($input['default'], 1);
-      $multyple = _isset_false($input['multyple'], 1);
-      $value   = _isset_false($input['value']);
-      $check_active = _isset_false($input['check_active'], 1);
-      
-      if( $input['type'] != 'checkbox' && $input['type'] != 'radio' )
-        _isset_default( $input['placeholder'], $default );
-
-      if( isset($input['desc']) ){
-        $desc = $input['desc'];
-        $input['desc'] = false;
-      }
-      elseif( isset( $input['description'] ) ) {
-        $desc = $input['description'];
-        $input['description'] = false;
-      }
-      else {
-        $desc = false;
-      }
-
-      if( !isset($input['name']) )
-          $input['name'] = _isset_empty($input['id']);
-
-      $input['id'] = str_replace('][', '_', $input['id']);
-      
-      /**
-       * set values
-       */
-      $active_name = $check_active ? $input[$check_active] : str_replace('[]', '', $input['name']);
-      $active_value = ( is_array($active) && sizeof($active) > 0 && isset($active[$active_name]) ) ?
-         $active[$active_name] : false;
-
-      $entry = '';
-      if($input['type'] == 'checkbox' || $input['type'] == 'radio'){
-        $entry = self::is_checked( $value, $active_value, $default );
-      }
-      elseif( $input['type'] == 'select' ){
-        $entry = ($active_value) ? $active_value : $default;
-      }
-      else {
-        // if text, textarea, number, email..
-        $entry = $active_value;
-        $placeholder = $default;
-      }
-
-      $input_html = '';
-      switch ($input['type']) {
-        case 'checkbox':
-        case 'radio':
-
-          if( empty($input['value']) )
-            $input['value'] = 'on';
-
-          if( $entry )
-            $input['checked'] = 'true';
-
-          // if $clear_value === false dont use defaults (couse default + empty value = true)
-          $cv = self::$clear_value;
-          if( false !== $cv )
-            $input_html .= "<input name='{$input['name']}' type='hidden' value='{$cv}'>\n";
-
-          $input_html .= "<input";
-          foreach ($input as $attr => $val) {
-            if( $val )
-              $input_html .= ' ' . esc_attr($attr) . '="' . esc_attr($val) . '"';
-          }
-          $input_html .= ">";
-
-          $input_html .= (!$is_table && $label) ? '<label for="'.$input['id'].'">'.$label.'</label>' : '';
-
-          break;
-
-        case 'select':
-
-          $input_html .= (!$is_table && $label) ? '<label for="'.$input['id'].'">'.$label.'</label>' : '';
-          $options = _isset_false($input['options'], 1);
-          if(! $options )
-            break;
-
-          $input_html .= '<select';
-          foreach ($input as $attr => $val) {
-            if( $val )
-              $input_html .= ' ' . esc_attr($attr) . '="' . esc_attr($val) . '"';
-          }
-          $input_html .= '>';
-
-          foreach ($options as $value => $option) {
-            $active_str = ($active_id == $value) ? " selected": "";
-            $input_html .= "<option value='{$value}'{$active_str}>{$option}</option>";
-          }
-          $input_html .= "</select>";
-          // if( isset($multyple) && $multyple !== false )
-          //   $input_html .= "<span class='dashicons dashicons-plus multyple' style='display: none;'></span>";
-
-
-          break;
-
-        case 'textarea':
-          
-          $type = $input['type'];
-          _isset_default($input['rows'], 5);
-          _isset_default($input['cols'], 40);
-          unset($input['type']);
-          $input_html .= (!$is_table && $label) ? '<label for="'.$input['id'].'">'.$label.'</label>' : '';
-        case 'button':
-
-          $entry = ( empty($input['content']) ) ? $entry : $input['content'];
-          unset($input['content']);
-
-          $input_html .= '<' . $type;
-          foreach ($input as $attr => $val) {
-            if( $val )
-              $input_html .= ' ' . esc_attr($attr) . '="' . esc_attr($val) . '"';
-          }
-          $input_html .= '>' . $entry . '</'.$type.'>';
-          
-          if( isset($type) )
-            $input['type'] = $type;
-          
-          break;
-
-        case 'html':
-
-          $input_html .= $input['value'];
-
-          break;
-        
-        default: // text, hidden, submit, number, email
-
-          $input['class'] = (isset($input['class'])) ? $input['class'] . ' multyple' : 'multyple';
-         
-          if(!$is_table && $label)
-            $input_html .= '<label for="'.$input['id'].'">'.$label.'</label>';
-
-          $dash_class = 'plus';
-          if( is_array($entry) ){
-            foreach ($entry as $val) {
-
-              if( $dash_class != 'plus' )
-                $input_html .= $args['item_wrap'][1].$args['item_wrap'][0];
-
-              if( $entry )
-                $input['value'] = $val;
-
-              $input_html .= self::input_template( $input, $multyple, $dash_class );
-
-              $dash_class = 'minus';
-            }
-          }
-          else {
-            $input_html .= self::input_template( $input, $multyple, $dash_class );
-          }
-
-          break;
-      }
-      
-      /**
-        * @todo: set tooltip
-        */
-      if( $desc ){
-        $hidden = ( isset($args['hide_desc']) && $args['hide_desc'] === true ) ? "style='display: none;'" : '';
-        
-        $desc_html = "<span class='description'{$hidden}>{$desc}</span>";
-      } else {
-        $desc_html = '';
-      }
-      
-      if(!$is_table){
-        $html[] = $before . $args['item_wrap'][0] . $input_html . $args['item_wrap'][1] . $after . $desc_html;
-      }
-      elseif( $input['type'] == 'hidden' ){
-        $hidden[] = $before . $input_html . $after;
-      }
-      elseif( $input['type'] == 'html' ){
-        $html[] = $args['form_wrap'][1];
-        $html[] = $before . $input_html . $after;
-        $html[] = $args['form_wrap'][0];
-      }
-      else {
-        $item = $before . $args['item_wrap'][0]. $input_html .$args['item_wrap'][1] . $after;
-
-        $html[] = "<tr id='{$input['id']}'>";
-        $html[] = "  <{$args['label_tag']} class='label'>{$label}</{$args['label_tag']}>";
-        $html[] = "  <td>";
-        $html[] = "    " .$item;
-        $html[] = $desc_html;
-        $html[] = "  </td>";
-        $html[] = "</tr>";
-      }
-    } // endforeach
-    if($is_table)
-      $html[] = $args['form_wrap'][1];
-
-    $result = implode("\n", $html) . "\n" . implode("\n", $hidden);
-    if( $is_not_echo )
-      return $result;
-    else
-      echo $result;
+    return $result;
   }
 
-  static public function input_template( $input, $multyple, $dash_class ){
-    $input_html = '';
-    $input_html .= "<input";
-    foreach ($input as $attr => $val) {
-      if( $val )
-        $input_html .= ' ' . esc_attr($attr) . '="' . esc_attr($val) . '"';
-    }
-    $input_html .= ">";
-    if( isset($multyple) && $multyple !== false && $input['type'] !== 'submit' )
-      $input_html .= "<span class='dashicons dashicons-{$dash_class} multyple' style='display: none'></span>";
+  public static function render_select( $input, $active_id, $is_table, $label = '' ){
+    $result = '';
+    $options = _isset_false($input['options'], 1);
+    if(! $options )
+      return false;
 
-    return $input_html;
+    if(!$is_table && $label)
+      $result .= "<label for='{$input['id']}'> {$label} </label>";
+
+    $result .= "<select";
+    foreach ($input as $attr => $val) {
+      if( $val ){
+        $attr = esc_attr($attr);
+        $val  = esc_attr($val);
+        $result .= " {$attr}='{$val}'";
+      }
+    }
+    $result .= ">";
+    foreach ($options as $value => $option) {
+      $active_str = ($active_id == $value) ? " selected": "";
+      $result .= "<option value='{$value}'{$active_str}>{$option}</option>";
+    }
+    $result .= "</select>";
+
+    return $result;
+  }
+
+  public static function render_textarea( $input, $entry, $is_table, $label = '' ){
+    $result = '';
+    // set defaults
+    _isset_default($input['rows'], 5);
+    _isset_default($input['cols'], 40);
+
+    if(!$is_table && $label)
+      $result .= "<label for='{$input['id']}'> {$label} </label>";
+
+    $result .= "<textarea";
+    foreach ($input as $attr => $val) {
+      if($val){
+        $attr = esc_attr($attr);
+        $val  = esc_attr($val);
+        $result .= " {$attr}='{$val}'";
+      }
+    }
+    $result .= ">{$entry}</textarea>";
+
+    return $result;
+  }
+
+  public static function render_text( $input, $entry, $is_table, $label = '' ){
+    $result = '';
+
+    if(!$is_table && $label)
+      $result .= "<label for='{$input['id']}'> {$label} </label>";
+    if( $entry )
+      $input['value'] = $entry;
+
+    $result .= "<input";
+    foreach ($input as $attr => $val) {
+      if( $val ){
+        $attr = esc_attr($attr);
+        $val  = esc_attr($val);
+        $result .= " {$attr}='{$val}'";
+      }
+    }
+    $result .= ">";
+
+    return $result;
+  }
+  public static function render_html( $input, $entry, $is_table, $label = '' ){
+    return $input['value'];
   }
 }

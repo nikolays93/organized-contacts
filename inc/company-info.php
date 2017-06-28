@@ -1,96 +1,9 @@
 <?php
-namespace ORG;
+namespace PLUGIN_NAME;
 
-class Contact //extends AnotherClass
-{
-	public $count;
-	public $ID;
-	public $title;
-
-	function __construct($count=0){
-		$this->count = is_int($count) ? $count : false;
-
-		$this->ID = $this->_contact_post();
-	}
-
-	public function _contact_post(){
-		$contact_ids = get_option( 'contact_ids', false );
-
-		if( isset($contact_ids[$this->count]) ){
-			$_post = get_post($contact_ids[$this->count]);
-
-			$this->title = $_post->post_title;
-			return $_post->ID;
-		}
-
-		return false;
-	}
-}
-
-$contact = new Contact();
-var_dump(\WPForm::active(ORG_METANAME, false, true, $contact->ID));
- // var_dump( get_post_meta( $contact->ID, 'contacts', true ) );
-// var_dump($contact->_set_main_data());
-// add_filter( 'rq_title', 'ORG\title_builtin', 10, 2 );
-// function title_builtin($name, $link){
-// 	$tag = 'h4';
-// 	if( $name )
-// 		$name = "<{$tag}>{$name}</{$tag}>";
-	
-// 	if( $link )
-// 		$name = "<a href='{$link}'>{$name}</a>";
-
-// 	return $name;
-// }
-
-/**
- * Show Review Post From Archive 
- */
-// add_shortcode( 'RQ_ARCHIVE', 'RQ\posts_render' );
-// add_shortcode( 'RQ_POSTS', 'RQ\posts_render' );
-// add_shortcode( 'rq', 'RQ\posts_render' );
-// function posts_render(){
-// 	$query = new \WP_Query(	array(
-// 		'post_type' => RQ_TYPE,
-// 		'posts_per_page' => -1,
-// 		'post_status' => 'publish',
-// 		//'order'   => 'DESC', // or ASC
-// 		) );
-
-// 	ob_start();
-// 	while ( $query->have_posts() ) {
-// 		$query->the_post();
-
-// 		get_template_part( 'template-parts/content', RQ_TYPE );
-// 	}
-// 	return ob_get_clean();
-// }
-
-/**
- * Show Review Forms
- */
 if ( ! defined( 'ABSPATH' ) )
   exit; // Exit if accessed directly
-	/*
-	$query = new \WP_Query(	array(
-		'post_type' => ORG_SLUG,
-		'posts_per_page' => -1,
-		'post_status' => 'publish',
-		//'order'   => 'DESC', // or ASC
-		) );
 
-	// ob_start();
-	while ( $query->have_posts() ) {
-		$query->the_post();
-
-		var_dump(get_the_title() );
-		the_title();
-		//get_template_part( 'template-parts/content', ORG_SLUG );
-	}
-	return ob_get_clean();
-*/
-
-		/*
 // [our_address], [our_numbers], [our_email], [our_time_work], [our_socials] - for easy use
 function get_company_info( $field, $filter = 'the_content' ){
   $info = get_theme_mod( 'company_' . $field );
@@ -182,4 +95,4 @@ function company_display_settings($wp_customize){
       )
     );
 }
-add_action( 'customize_register', 'company_display_settings' );*/
+add_action( 'customize_register', 'PLUGIN_NAME\company_display_settings' );

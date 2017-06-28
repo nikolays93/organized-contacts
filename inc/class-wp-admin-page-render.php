@@ -1,5 +1,5 @@
 <?php
-namespace ORG;
+
 /**
  * Class Name: WPAdminPageRender
  * Class URI: https://github.com/nikolays93/classes.git
@@ -10,6 +10,7 @@ namespace ORG;
  * License: GNU General Public License v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
+namespace PLUGIN_NAME;
 
 class WPAdminPageRender
 {
@@ -18,10 +19,10 @@ class WPAdminPageRender
 	public $option_name = '';
 
 	protected $args = array(
-		'parent' => 'options-general.php',
-		'title' => '',
-		'menu' => 'Test page',
-		'permissions' => 'manage_options'
+		'parent'      => 'options-general.php',
+		'title'       => '',
+		'menu'        => 'Test page',
+		'permissions' => 'manage_options',
 		);
 	protected $page_content_cb = '';
 	protected $page_valid_cb = '';
@@ -37,11 +38,9 @@ class WPAdminPageRender
 		$this->page = $page_slug;
 		if( is_array( $args ) )
 			$this->args = array_merge( $this->args, $args );
+
 		$this->page_content_cb = $page_content_cb;
-		if( $option_name )
-			$this->option_name = $option_name;
-		else
-			$this->option_name = $this->page;
+		$this->option_name = ( $option_name ) ? $option_name : $this->page;
 		$this->page_valid_cb = ($valid_cb) ? $valid_cb : array($this, 'validate_options');
 
 		add_action('admin_menu', array($this,'add_page'));
@@ -138,6 +137,10 @@ class WPAdminPageRender
 	 * $pageslug . _inside_advanced_container
 	 * $pageslug . _after_form_inputs (default empty hook)
 	 * $pageslug . _after_page_wrap (default empty hook)
+	 *
+	 * @has_fiters
+	 * $pageslug . _form_action
+	 * $pageslug . _form_method
 	 */
 	function render_page(){
 		?>
@@ -149,12 +152,13 @@ class WPAdminPageRender
 			
 			<?php do_action( $this->page . '_after_title'); ?>
 
-			<form id="ccpt" enctype="multipart/form-data" action="options.php" method="post">  
+			<?php
+				$action = apply_filters( $this->page . '_form_action', 'options.php');
+				$method = apply_filters( $this->page . '_form_method', 'post');
+			?>
+
+			<form id="options" enctype="multipart/form-data" action="<?php echo $action; ?>" method="<?php echo $method; ?>">
 				<?php do_action( $this->page . '_before_form_inputs'); ?>
-				<?php
-				/* Used to save closed metaboxes and their order */
-				wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-				wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 
 				<div id="poststuff">
 
@@ -177,7 +181,6 @@ class WPAdminPageRender
 							 * $page_slug . _inside_side_container hook.
 							 *
 							 * @hooked array('WPAdminPageRender', 'side_render') - 10
-							 * @hooked 'submit_button' - 20
 							 */
 							do_action( $this->page . '_inside_side_container');
 							?>
@@ -206,10 +209,16 @@ class WPAdminPageRender
 						
 					</div> <!-- #post-body -->
 				</div> <!-- #poststuff -->
+
 				<?php
+					/* Used to save closed metaboxes and their order */
+					wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
+					wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
 					// add hidden settings
-					settings_fields( $this->option_name );
+					if($action == 'options.php')
+						settings_fields( $this->option_name );
 				?>
+
 				<?php do_action( $this->page . '_after_form_inputs'); ?>
 			</form>
 

@@ -1,13 +1,15 @@
 <?php
+namespace PLUGIN_NAME;
+
 /**
  * Register Post Type
  */
-add_action('init', 'register_contacts_post_type');
+add_action('init', 'PLUGIN_NAME\register_contacts_post_type');
 function register_contacts_post_type(){
   /**
    * @todo: add organization comments as reviews
    */  
-  register_post_type( ORG_SLUG, array(
+  register_post_type( NEW_SLUG, array(
     'label'  => 'Контакты',
     'labels' => array(
       'name'               => 'Контакты',
@@ -56,9 +58,9 @@ function register_contacts_post_type(){
 /**
  * After contacts post save
  */
-add_action( 'save_post', 'save_contact_ids_option' );
+add_action( 'save_post', 'PLUGIN_NAME\save_contact_ids_option' );
 function save_contact_ids_option( $post_id ) {
-  if ( ORG_SLUG != $_POST['post_type'] || wp_is_post_revision( $post_id ) )
+  if ( !isset($_POST['post_type']) || NEW_SLUG != $_POST['post_type'] || wp_is_post_revision( $post_id ) )
     return $post_id;
 
   if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
@@ -68,7 +70,7 @@ function save_contact_ids_option( $post_id ) {
     'posts_per_page'   => -1,
     'orderby'          => 'date',
     'order'            => 'ASC',
-    'post_type'        => ORG_SLUG,
+    'post_type'        => NEW_SLUG,
     'post_status'      => 'publish',
     );
   $posts_array = get_posts( $args );
@@ -87,35 +89,35 @@ function save_contact_ids_option( $post_id ) {
 /**
  * Re-Order All Metabox
  */
-add_action('edit_form_after_title', 'resort_boxes' );
-add_action( 'load-post.php',     'metabox_action' );
-add_action( 'load-post-new.php', 'metabox_action' );
+add_action('edit_form_after_title', 'PLUGIN_NAME\resort_boxes' );
+add_action( 'load-post.php',     'PLUGIN_NAME\metabox_action' );
+add_action( 'load-post-new.php', 'PLUGIN_NAME\metabox_action' );
 function resort_boxes(){
     global $post, $wp_meta_boxes;
 
-    if( $post->post_type == ORG_SLUG ){
+    if( $post->post_type == NEW_SLUG ){
         do_meta_boxes(get_current_screen(), 'advanced', $post);
         unset($wp_meta_boxes[get_post_type($post)]['advanced']);
     }
 }
 function metabox_action(){
     $screen = get_current_screen();
-    if( !isset($screen->post_type) || $screen->post_type != ORG_SLUG )
+    if( !isset($screen->post_type) || $screen->post_type != NEW_SLUG )
         return false;
 
-    $boxes = new RQ\WPPostBoxes();
-    $boxes->add_box('Контакты', 'metabox_render', false, 'high' );
-    $boxes->add_fields( ORG_METANAME );
+    $boxes = new WPPostBoxes();
+    $boxes->add_box('Контакты', 'PLUGIN_NAME\metabox_render', false, 'high' );
+    $boxes->add_fields( NEW_SLUG );
 }
 function metabox_render($post, $data){
   $form =array(
-    array(
-      'id'      => 'city',
-      'type'    => 'text',
-      'label'   => 'Город',
-      // 'class'   => 'widefat',
-      // 'desc'    => '',
-      ),
+    // array(
+    //   'id'      => 'city',
+    //   'type'    => 'text',
+    //   'label'   => 'Город',
+    //   // 'class'   => 'widefat',
+    //   // 'desc'    => '',
+    //   ),
     array(
       'id'      => 'address',
       'type'    => 'textarea',
@@ -155,11 +157,11 @@ function metabox_render($post, $data){
 
   WPForm::render(
     $form,
-    WPForm::active(ORG_METANAME, false, true, true),
+    WPForm::active(NEW_SLUG, false, true, true),
     true,
     array(
       'clear_value' => false,
-      'admin_page' => ORG_METANAME,
+      'admin_page' => NEW_SLUG,
       )
     );
   wp_nonce_field( $data['args'][0], $data['args'][0].'_nonce' );
@@ -168,15 +170,15 @@ function metabox_render($post, $data){
 /**
  * Custom Excerpt Meta Box
  */
-add_action( 'add_meta_boxes' , 'remove_postexcerpt_box', 99 );
-add_action( 'add_meta_boxes',  'excerpt_box_action' );
+add_action( 'add_meta_boxes' , 'PLUGIN_NAME\remove_postexcerpt_box', 99 );
+add_action( 'add_meta_boxes',  'PLUGIN_NAME\excerpt_box_action' );
 function remove_postexcerpt_box(){
 
-    remove_meta_box( 'postexcerpt' , ORG_SLUG, 'normal' );
+    remove_meta_box( 'postexcerpt' , NEW_SLUG, 'normal' );
 }
 function excerpt_box_action(){
 
-    add_meta_box('raq_postexcerpt', __( 'Краткое описание' ), 'excerpt_box_custom', ORG_SLUG, 'normal');
+    add_meta_box('raq_postexcerpt', __( 'Краткое описание' ), 'PLUGIN_NAME\excerpt_box_custom', NEW_SLUG, 'normal');
 }
 function excerpt_box_custom(){
     global $post;

@@ -1,5 +1,5 @@
 <?php
-namespace ORG;
+namespace PLUGIN_NAME;
 
 class WPPostBoxes {
 	const NONCE = 'abra_kadabra_security';
