@@ -1,10 +1,17 @@
 <?php
-namespace PLUGIN_NAME;
-
 if ( ! defined( 'ABSPATH' ) )
   exit; // Exit if accessed directly
 
-// [our_address], [our_numbers], [our_email], [our_time_work], [our_socials] - for easy use
+/**
+ * Shortcodes: for easy use
+ *
+ * [our_address]
+ * [our_numbers]
+ * [our_email]
+ * [our_time_work]
+ * [our_socials]
+ * [our_first_number]
+ */
 function get_company_info( $field, $filter = 'the_content' ){
   $info = get_theme_mod( 'company_' . $field );
   if($filter == 'the_content')
@@ -19,7 +26,7 @@ function get_company_numbers(){ return get_company_info('numbers'); }
 function get_company_time_work(){ return get_company_info('time_work'); }
 function get_company_email(){ return get_company_info('email'); }
 function get_company_socials(){ return get_company_info('socials'); }
-function get_company_first_number( $del = ',', $num=0, $filter = 'the_content' ) {
+function get_company_number( $del = ',', $num=0, $filter = 'the_content' ) {
   // for shortcode
   if(! $del) $del = ',';
   if(! $num) $num = 0;
@@ -37,7 +44,7 @@ function get_company_first_number( $del = ',', $num=0, $filter = 'the_content' )
 }
 add_shortcode('our_address', 'get_company_address');
 add_shortcode('our_numbers', 'get_company_numbers');
-add_shortcode('our_first_number', 'get_company_first_number');
+add_shortcode('our_first_number', 'get_company_number');
 add_shortcode('our_time_work', 'get_company_time_work');
 add_shortcode('our_email', 'get_company_email');
 add_shortcode('our_socials', 'get_company_socials');
@@ -95,4 +102,4 @@ function company_display_settings($wp_customize){
       )
     );
 }
-add_action( 'customize_register', 'PLUGIN_NAME\company_display_settings' );
+add_action( 'customize_register', 'company_display_settings' );
