@@ -10,7 +10,8 @@
  * License: GNU General Public License v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
-namespace PLUGIN_NAME;
+if(class_exists('WPAdminPageRender'))
+	return;
 
 class WPAdminPageRender
 {

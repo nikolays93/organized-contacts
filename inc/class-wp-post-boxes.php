@@ -1,5 +1,7 @@
 <?php
-namespace PLUGIN_NAME;
+
+if( class_exists('WPPostBoxes') )
+	return;
 
 class WPPostBoxes {
 	const NONCE = 'abra_kadabra_security';
@@ -100,10 +102,10 @@ class WPPostBoxes {
 		if ( ! wp_verify_nonce( $nonce, self::NONCE ) )
 			return $post_id;
 
-		$test = array();
-		$test['post'] = $_POST;
-		$test['metas'] = $this->meta_fields;
-		file_put_contents(__DIR__ . '/meta_debug.log', print_r($test, 1));
+		// $test = array();
+		// $test['post'] = $_POST;
+		// $test['metas'] = $this->meta_fields;
+		// file_put_contents(__DIR__ . '/meta_debug.log', print_r($test, 1));
 		// if ( ! current_user_can( 'edit_page', $post_id ) )
 		// 	return $post_id;
 

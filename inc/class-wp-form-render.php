@@ -9,18 +9,26 @@
  * License: GNU General Public License v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
-namespace PLUGIN_NAME;
 
 if ( ! defined( 'ABSPATH' ) )
   exit; // disable direct access
 
-function _isset_default(&$var, $default, $unset = false){
-  $result = $var = isset($var) ? $var : $default;
-  if($unset) $var = FALSE;
-  return $result;
+if(!function_exists('_isset_default')){
+  function _isset_default(&$var, $default, $unset = false){
+    $result = $var = isset($var) ? $var : $default;
+    if($unset) $var = FALSE;
+    return $result;
+  }
 }
-function _isset_false(&$var, $unset = false){ return _isset_default( $var, false, $unset ); }
-function _isset_empty(&$var, $unset = false){ return _isset_default( $var, '', $unset ); }
+if(!function_exists('_isset_false')){
+  function _isset_false(&$var, $unset = false){ return _isset_default( $var, false, $unset ); }
+}
+if(!function_exists('_isset_empty')){
+  function _isset_empty(&$var, $unset = false){ return _isset_default( $var, '', $unset ); }
+}
+
+if(class_exists('WPForm'))
+  return;
 
 class WPForm {
   static protected $clear_value;
