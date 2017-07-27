@@ -185,8 +185,8 @@ class ORGContacts {
         'menu_name'          => 'Контакты',
       ),
       'description'         => 'Контактная информация вашей организации',
-      'public'              => false,
-      'publicly_queryable'  => false,
+      'public'              => true,
+      'publicly_queryable'  => true,
       'exclude_from_search' => true,
       'show_ui'             => true,
       'show_in_menu'        => true,
@@ -202,7 +202,7 @@ class ORGContacts {
           //'excerpt',
           'editor',
           ) ),
-      'has_archive'         => true,
+      'has_archive'         => false,
     ) );
   }
 
