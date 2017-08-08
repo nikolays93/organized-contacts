@@ -6,50 +6,18 @@ if ( ! defined( 'ABSPATH' ) )
   exit; // disable direct access
 
 /**
- * @todo redirect to detail if post is lonely
+ * @todo: redirect to detail if post is lonely
+ * @todo: maybe add organization comments as reviews
  */
 
 class PostType {
-  static public $slug;
   /** Static Class */
   private function __clone() {}
   private function __wakeup() {}
   private function __construct() {}
-  // private static $instance = null;
-  // public static function get_instance() {
-  //   if ( ! self::$instance )
-  //     self::$instance = new self;
-  //   return self::$instance;
-  // }
-
-  // function update_contacts_id( $post_id ) {
-  //   if ( !isset($_POST['post_type']) || self::SLUG != $_POST['post_type'] || wp_is_post_revision( $post_id ) )
-  //     return $post_id;
-
-  //   if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
-  //     return $post_id;
-
-  //   $args = array(
-  //     'posts_per_page'   => -1,
-  //     'orderby'          => 'date',
-  //     'order'            => 'ASC',
-  //     'post_type'        => self::SLUG,
-  //     'post_status'      => 'publish',
-  //     );
-  //   $posts_array = get_posts( $args );
-
-  //   $contact_ids = array();
-  //   foreach ($posts_array as $_post) {
-  //     $contact_ids[$_post->ID] = $_post->post_title;
-  //   }
-  //   update_option( self::ORGS_ID, $contact_ids );
-  // }
 
   static function register_post_type(){
-    /**
-     * @todo: maybe add organization comments as reviews
-     */
-    register_post_type( self::$slug, array(
+    register_post_type( CONTACTS_SLUG, array(
       'label'  => 'Контакты',
       'labels' => array(
         'name'               => 'Контакты',
@@ -83,24 +51,34 @@ class PostType {
           //'excerpt',
           'editor',
           ) ),
-      'has_archive'         => false,
+      'has_archive'         => true,
       ) );
   }
 
-  static function add_contacts_metabox(){
-      $screen = get_current_screen();
-      if( !isset($screen->post_type) || $screen->post_type != self::$slug )
-          return false;
+  static function update_theme_mod($post_id){
+    if( get_theme_mod( 'company_primary_id', false ) == $post_id ){
+      set_theme_mod( 'company_name', sanitize_text_field($_POST['post_title']) );
 
-      Contacts\WP_Post_Metabox::add_field( '_' . self::$slug );
-      Contacts\WP_Post_Metabox::add_field( '_primary' );
-      new Contacts\WP_Post_Metabox('Контакты', array(__CLASS__, 'contacts_metabox_callback'), 'advanced', 'high');
-      new Contacts\WP_Post_Metabox('Сделать главными', array(__CLASS__, 'contacts_metabox_callback_side'), 'side', 'low' );
+      $field = array_filter($_POST['_'.CONTACTS_SLUG], 'sanitize_text_field');
+      set_theme_mod( 'company_address', isset($field['address']) ? $field['address'] : '' );
+      set_theme_mod( 'company_numbers', isset($field['numbers']) ? $field['numbers'] : '' );
+      set_theme_mod( 'company_email', isset($field['email']) ? $field['email'] : '' );
+      set_theme_mod( 'company_time_work', isset($field['work-time']) ? $field['work-time'] : '' );
+      set_theme_mod( 'company_socials', isset($field['socials']) ? $field['socials'] : '' );
+    }
   }
 
   /********************************* Contacts Meta Boxes ********************************/
+  static function add_contacts_metabox(){
+      $screen = get_current_screen();
+      if( !isset($screen->post_type) || $screen->post_type != CONTACTS_SLUG )
+          return false;
+
+      WP_Post_Metabox::add_field( '_' . CONTACTS_SLUG );
+      new WP_Post_Metabox('Контакты', array(__CLASS__, 'contacts_metabox_callback'), 'advanced', 'high');
+  }
+
   static function contacts_metabox_callback($post, $data){
-    // var_dump(get_post_meta($_GET['post']));
     $form =array(
       // array(
       //   'id'      => 'city',
@@ -149,36 +127,16 @@ class PostType {
 
     WPForm::render(
       $form,
-      WPForm::active('_' . self::SLUG, false, true, true),
+      WPForm::active('_' . CONTACTS_SLUG, false, true, true),
       true,
-      array(
-        'clear_value' => false,
-        'admin_page' => '_' . self::SLUG,
-        )
-      );
-    wp_nonce_field( $data['args'][0], $data['args'][0].'_nonce' );
-  }
-
-  static function contacts_metabox_callback_side(){
-    WPForm::render(
-      array(
-        'id'      => '_primary',
-        'type'    => 'checkbox',
-        'label'   => 'Сделать эти контакты главными',
-        ),
-      array( '_primary' => isset($_GET['post']) ? get_post_meta( absint($_GET['post']), '_primary', true )  : false ),
-      true,
-      array(
-        'clear_value' => false,
-        // 'admin_page' => '_primary',
-        )
+      array('admin_page' => '_' . CONTACTS_SLUG)
       );
   }
 
   static function re_order_contacts_metaboxes(){
       global $post, $wp_meta_boxes;
 
-      if( $post->post_type == self::$slug ){
+      if( $post->post_type == CONTACTS_SLUG ){
           do_meta_boxes(get_current_screen(), 'advanced', $post);
           // echo "<span>Описание компании:</span><br>";
           unset($wp_meta_boxes[get_post_type($post)]['advanced']);

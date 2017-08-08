@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Организованные контакты (Organized Contacts)
+Plugin Name: Контакты (Organized Contacts)
 Plugin URI: https://github.com/nikolays93/organized-contacts/
-Description: Добавляет возможность управлять контактными данными используя шорткоды: [our_address], [our_numbers], [our_email], [our_time_work], [our_socials], [our_first_number]
-Version: 2.0.0 alpha
+Description: Добавляет возможность управлять контактными данными используя шорткоды.
+Version: 2.0.1 alpha
 Author: NikolayS93
 Author URI: https://vk.com/nikolays_93
 Author EMAIL: nikolayS93@ya.ru
@@ -20,17 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
   exit; // disable direct access
 
 define('CONTACTS_DIR', rtrim(plugin_dir_path( __FILE__ ), '/') );
-
-/**
- * @Shortcodes (for easy use):
- *
- * [our_address]
- * [our_numbers]
- * [our_email]
- * [our_time_work]
- * [our_socials]
- * [our_first_number]
- */
+define('CONTACTS_SLUG', 'contacts' );
 
 add_action( 'plugins_loaded', 'Contacts\Init' );
 function Init(){
@@ -44,9 +34,9 @@ function Init(){
   if( $details = get_theme_mod( 'company_details', false ) ){
     require_once CONTACTS_DIR . '/inc/contacts-type.php';
 
-    PostType::$slug = 'contacts';
-
     add_action( 'init', array('Contacts\PostType', 'register_post_type') );
+
+    add_action( 'save_post', array('Contacts\PostType', 'update_theme_mod') );
 
     add_action( 'load-post.php',     array('Contacts\PostType', 'add_contacts_metabox') );
     add_action( 'load-post-new.php', array('Contacts\PostType', 'add_contacts_metabox') );
