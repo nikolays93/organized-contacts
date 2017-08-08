@@ -129,7 +129,7 @@ class ORGContacts {
     $inputs = array_map_recursive( 'sanitize_text_field', $inputs );
     $inputs = array_filter_recursive($inputs);
 
-    file_put_contents(__DIR__ . '/debug.log', print_r($inputs, 1) );
+    // file_put_contents(__DIR__ . '/debug.log', print_r($inputs, 1) );
     /* Create First Organization if not exists */
     $query = new WP_Query( array(
       'post_type' => self::SLUG,
@@ -152,7 +152,8 @@ class ORGContacts {
             'email'     => get_theme_mod( 'company_email' ),
             'work-time' => get_theme_mod( 'company_time_work' ),
             'socials'   => get_theme_mod( 'company_socials' ),
-            )
+            ),
+          '_primary' => 'on',
           ),
         );
       $post_id = wp_insert_post( $new_post, true );
@@ -167,7 +168,7 @@ class ORGContacts {
   function register_contacts_post_type(){
     /**
      * @todo: add organization comments as reviews
-     */  
+     */
     register_post_type( self::SLUG, array(
       'label'  => 'Контакты',
       'labels' => array(
@@ -234,12 +235,14 @@ class ORGContacts {
       if( !isset($screen->post_type) || $screen->post_type != self::SLUG )
           return false;
 
-      $boxes = new WPPostBoxes();
-      $boxes->add_box('Контакты', array($this, 'contacts_metabox_callback'), false, 'high' );
-      $boxes->add_fields( '_' . self::SLUG );
+      Contacts\WP_Post_Metabox::add_field( '_' . self::SLUG );
+      Contacts\WP_Post_Metabox::add_field( '_primary' );
+      new Contacts\WP_Post_Metabox('Контакты', array($this, 'contacts_metabox_callback'), 'advanced', 'high');
+      new Contacts\WP_Post_Metabox('Сделать главными', array($this, 'contacts_metabox_callback_side'), 'side', 'low' );
   }
 
   function contacts_metabox_callback($post, $data){
+    // var_dump(get_post_meta($_GET['post']));
     $form =array(
       // array(
       //   'id'      => 'city',
@@ -297,14 +300,30 @@ class ORGContacts {
       );
     wp_nonce_field( $data['args'][0], $data['args'][0].'_nonce' );
   }
-  
+
+  function contacts_metabox_callback_side(){
+    WPForm::render(
+      array(
+        'id'      => '_primary',
+        'type'    => 'checkbox',
+        'label'   => 'Сделать эти контакты главными',
+        ),
+      array( '_primary' => isset($_GET['post']) ? get_post_meta( absint($_GET['post']), '_primary', true )  : false ),
+      true,
+      array(
+        'clear_value' => false,
+        // 'admin_page' => '_primary',
+        )
+      );
+  }
+
   function re_order_contacts_metaboxes(){
       global $post, $wp_meta_boxes;
 
       if( $post->post_type == self::SLUG ){
           do_meta_boxes(get_current_screen(), 'advanced', $post);
           // label after @contacts (for editor)
-          echo "<span>Описание компании:</span><br>";
+          // echo "<span>Описание компании:</span><br>";
           unset($wp_meta_boxes[get_post_type($post)]['advanced']);
       }
   }
@@ -327,8 +346,27 @@ function get_company_info( $field, $filter = 'the_content' ){
       $contact_id = $post->ID;
     }
     else {
-      reset($ids);
-      $contact_id = key($ids);
+      $args = array(
+        'post__in'   => array_keys($ids),
+        'post_type'  => ORGContacts::SLUG,
+        'meta_query' => array(
+          array(
+            'key'     => '_primary',
+            'value'   => 'on',
+            )
+          )
+        );
+      $query = new WP_Query( $args );
+
+      if ( $query->have_posts() ) {
+        $query->the_post();
+        $contact_id = get_the_id();
+      }
+      else {
+        reset($ids);
+        $contact_id = key($ids);
+      }
+      wp_reset_postdata();
     }
 
     if( !$contact_id )
@@ -337,7 +375,7 @@ function get_company_info( $field, $filter = 'the_content' ){
     $all_data = get_post_meta( $contact_id, '_'.ORGContacts::SLUG, true );
     $info = isset($all_data[$field]) ? $all_data[$field] : ' ';
   }
-  
+
   if($filter == 'the_content')
     return str_replace( ']]>', ']]&gt;', wpautop(wptexturize( $info )) );
   elseif( $filter )
@@ -346,26 +384,45 @@ function get_company_info( $field, $filter = 'the_content' ){
   return $info;
 }
 
-function get_company_address(){ return get_company_info('address'); }
-function get_company_numbers(){ return get_company_info('numbers'); }
-function get_company_time_work(){ return get_company_info('time_work'); }
-function get_company_email(){ return get_company_info('email'); }
-function get_company_socials(){ return get_company_info('socials'); }
-function get_company_number( $del = ',', $num=0, $filter = 'the_content' ) {
-// for shortcode
-  if(! $del) $del = ',';
-  if(! $num) $num = 0;
-  if(! $filter || $filter != false) $filter = 'the_content';
+function get_company_address($atts){
+  extract( shortcode_atts( array('filter' => 'the_content'), $atts) );
+  return get_company_info('address', $filter);
+}
+function get_company_numbers($atts){
+  extract( shortcode_atts( array('filter' => 'the_content'), $atts) );
+  return get_company_info('numbers', $filter);
+}
+function get_company_time_work($atts){
+  extract( shortcode_atts( array('filter' => 'the_content'), $atts) );
+  return get_company_info('time_work', $filter);
+}
+function get_company_email($atts){
+  extract( shortcode_atts( array('filter' => 'the_content'), $atts) );
+  return get_company_info('email', $filter);
+}
+function get_company_socials($atts){
+  extract( shortcode_atts( array('filter' => 'the_content'), $atts) );
+  return get_company_info('socials', $filter);
+}
+function get_company_number( $atts=false, $content=false, $shortcode='get_company_number', $filter = false ) {
+  $atts = shortcode_atts(array(
+    'filter' => 'the_content',
+    'del' => ',',
+    'num' => '0',
+    ), $atts);
+
+  if( $filter )
+    $atts['filter'] = $filter;
 
   $numbers = get_company_info('numbers', false);
-  $info = explode($del, $numbers);
+  $info = explode($atts['del'], $numbers);
 
-  if($filter == 'the_content')
-    return str_replace( ']]>', ']]&gt;', wpautop(wptexturize( $info[$num] )) );
-  elseif( $filter )
-    return apply_filters( $filter, $info[$num] );
+  if($atts['filter'] == 'the_content')
+    return str_replace( ']]>', ']]&gt;', wpautop(wptexturize( $info[$atts['num']] )) );
+  elseif( $atts['filter'] )
+    return apply_filters( $atts['filter'], $info[$atts['num']] );
 
-  return $info[$num];
+  return $info[$atts['num']];
 }
 add_shortcode('our_address', 'get_company_address');
 add_shortcode('our_numbers', 'get_company_numbers');
