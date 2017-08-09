@@ -1,6 +1,7 @@
 <?php
 
 function company_format($info, $filter, $before = '', $after = ''){
+  $info = $before . $info . $after;
   // default filter
   if($filter == 'the_content')
     $info = str_replace( ']]>', ']]&gt;', wpautop(wptexturize( $info )) );
@@ -8,7 +9,7 @@ function company_format($info, $filter, $before = '', $after = ''){
   elseif( $filter && !in_array($filter, array('false', false, 'none', 'disable', '0', 'off')) )
     $info = apply_filters( $filter, $info );
 
-  return $before . $info . $after;
+  return $info;
 }
 
 function company_info( $field ){
