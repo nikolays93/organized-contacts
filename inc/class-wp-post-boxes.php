@@ -9,11 +9,6 @@ function array_map_recursive($callback, $array){
 	return array_map($func, $array);
 }
 
-function sanitize_meta_field( $field ){
-
-	return is_array( $field ) ? array_map_recursive('sanitize_text_field', $field) : sanitize_text_field( $field );
-}
-
 class WP_Post_Metabox {
 	const SECURE = 'AXpEmw';
 	static public $count = 0;
@@ -37,12 +32,16 @@ class WP_Post_Metabox {
 	function __destruct() {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 
-		add_filter( 'contacts_sanitize_meta_field', 'Contacts\sanitize_meta_field', 10, 1 );
 		add_action( 'save_post', array( $this, 'save' ) );
 	}
 
 	static function add_field( $field_name ){
 		self::$fields[] = $field_name;
+	}
+
+	function callback_with_nonce(){
+		call_user_func($this->callback);
+		wp_nonce_field( WP_Post_Metabox::SECURE, WP_Post_Metabox::SECURE );
 	}
 
 	function add_meta_box( $post_type ){
@@ -55,7 +54,7 @@ class WP_Post_Metabox {
 		add_meta_box(
 			'CustomMetaBox-' . self::$count,
 			$this->title,
-			$this->callback,
+			array($this, 'callback_with_nonce'),
 			$post_types,
 			$this->side,
 			$this->priority,
@@ -69,13 +68,15 @@ class WP_Post_Metabox {
 	 * @param int $post_id ID поста, который сохраняется.
 	 */
 	function save( $post_id ) {
-		$nonce = isset( $_POST[self::SECURE . '_nonce'] ) ? $_POST[self::SECURE . '_nonce'] : false;
-		if ( !$nonce ||  ! wp_verify_nonce( $_POST[self::SECURE . '_nonce'], self::SECURE ) )
+		if( !isset( $_POST[self::SECURE] ) )
+			return $post_id;
+
+		if ( ! wp_verify_nonce( $_POST[self::SECURE], self::SECURE ) )
 			return $post_id;
 
 		foreach (self::$fields as $field) {
 			if(isset($_POST[$field])){
-				$meta = apply_filters( 'contacts_sanitize_meta_field', $_POST[$field] );
+				$meta = $_POST[$field];
 
 				update_post_meta( $post_id, $field, $meta );
 			}

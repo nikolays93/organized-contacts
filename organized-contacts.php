@@ -3,7 +3,7 @@
 Plugin Name: Контакты (Organized Contacts)
 Plugin URI: https://github.com/nikolays93/organized-contacts/
 Description: Добавляет возможность управлять контактными данными используя шорткоды.
-Version: 2.0.1 alpha
+Version: 2.1.1 alpha
 Author: NikolayS93
 Author URI: https://vk.com/nikolays_93
 Author EMAIL: nikolayS93@ya.ru

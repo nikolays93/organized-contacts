@@ -48,6 +48,7 @@ class PostType {
         array(
           'title',
           'thumbnail',
+          'page-attributes',
           //'excerpt',
           'editor',
           ) ),
@@ -57,15 +58,21 @@ class PostType {
 
   static function update_theme_mod($post_id){
     if( get_theme_mod( 'company_primary_id', false ) == $post_id ){
-      set_theme_mod( 'company_name', sanitize_text_field($_POST['post_title']) );
+      set_theme_mod( 'company_name', isset($_POST['post_title']) ? sanitize_text_field($_POST['post_title']) : '' );
 
-      $field = array_filter($_POST['_'.CONTACTS_SLUG], 'sanitize_text_field');
-      set_theme_mod( 'company_address', isset($field['address']) ? $field['address'] : '' );
-      set_theme_mod( 'company_numbers', isset($field['numbers']) ? $field['numbers'] : '' );
-      set_theme_mod( 'company_email', isset($field['email']) ? $field['email'] : '' );
-      set_theme_mod( 'company_time_work', isset($field['work-time']) ? $field['work-time'] : '' );
-      set_theme_mod( 'company_socials', isset($field['socials']) ? $field['socials'] : '' );
+      if( !isset($_POST['_'.CONTACTS_SLUG]) )
+        return $post_id;
+
+      $field = $_POST['_'.CONTACTS_SLUG];//array_filter($_POST['_'.CONTACTS_SLUG], 'sanitize_text_field');
+      set_theme_mod( 'company_address', isset($field['address']) ? stripslashes( $field['address'] ) : '' );
+      set_theme_mod( 'company_numbers', isset($field['numbers']) ? stripslashes( $field['numbers'] ) : '' );
+      set_theme_mod( 'company_email', isset($field['email']) ? stripslashes( $field['email'] ) : '' );
+      set_theme_mod( 'company_time_work', isset($field['work-time']) ? stripslashes( $field['work-time'] ) : '' );
+      set_theme_mod( 'company_socials', isset($field['socials']) ? stripslashes( $field['socials'] ) : '' );
     }
+
+
+    return $post_id;
   }
 
   /********************************* Contacts Meta Boxes ********************************/
@@ -78,8 +85,8 @@ class PostType {
       new WP_Post_Metabox('Контакты', array(__CLASS__, 'contacts_metabox_callback'), 'advanced', 'high');
   }
 
-  static function contacts_metabox_callback($post, $data){
-    $form =array(
+  static function contacts_metabox_callback(){
+    $form = array(
       // array(
       //   'id'      => 'city',
       //   'type'    => 'text',

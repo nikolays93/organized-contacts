@@ -14,9 +14,8 @@ function company_format($info, $filter, $before = '', $after = ''){
 function company_info( $field ){
   global $post;
 
-  if( $details = get_theme_mod( 'company_details', false ) ){
-    $id = (CONTACTS_SLUG == get_post_type( $post )) ? $post->ID : $details;
-    $all_data = get_post_meta( $id, '_'.CONTACTS_SLUG, true );
+  if( $details = get_theme_mod( 'company_details', false ) && CONTACTS_SLUG == get_post_type( $post ) ){
+    $all_data = get_post_meta( $post->ID, '_'.CONTACTS_SLUG, true );
     return isset($all_data[ $field ]) ? $all_data[ $field ] : '';
   }
 

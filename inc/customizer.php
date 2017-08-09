@@ -116,7 +116,7 @@ function update_primary_company(){
     'post_content'   => '',
     'post_excerpt'   => '',
     'post_status'      => 'publish',
-        //'post_name'      => 'first_contact',
+    //'post_name'      => 'first_contact',
     'post_title'     => get_theme_mod( 'company_name' ),
     'post_type'      => CONTACTS_SLUG,
     'meta_input' => array(
@@ -132,7 +132,8 @@ function update_primary_company(){
 
   /* Create First Organization if not exists or update if initialize */
   if( get_theme_mod( 'company_details' ) ){
-    if( ! has_items() ){
+    $query = '';
+    if( ! has_items($query) ){
       $post_id = wp_insert_post( $_post, true );
       if( !is_wp_error($post_id) && $post_id)
         set_theme_mod( 'company_primary_id', $post_id );
