@@ -25,11 +25,17 @@ function company_info( $field ){
 
 function company_info_shortcode($atts){
   extract( shortcode_atts( array(
-    'field' => '',
+    'field' => 'name',
     'filter' => 'the_content',
     'before' => '',
     'after' => ''),
   $atts) );
+
+  if( $field == 'phone' )
+    get_company_number($atts);
+
+  elseif( $field == 'phones' )
+   $field = 'numbers';
 
   return company_format(company_info($field), $filter, $before, $after);
 }
