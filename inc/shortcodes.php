@@ -50,7 +50,7 @@ function get_company_number( $atts=false, $content=false, $shortcode='our_first_
 
   $info = explode($atts['del'], company_info( 'numbers' ));
   $fkey = $atts['num'] - 1;
-  return company_format($info[ $fkey ], $filter, $before, $after);
+  return company_format($info[ $fkey ], $atts['filter'], $atts['before'], $atts['after']);
 }
 
 add_shortcode('company', 'company_info_shortcode');
