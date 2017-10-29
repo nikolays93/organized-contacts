@@ -1,5 +1,6 @@
 <?php
-namespace Contacts;
+
+namespace CDevelopers\Contacts;
 
 function company_format($info, $filter, $before = '', $after = ''){
   $info = $before . $info . $after;
@@ -16,10 +17,10 @@ function company_format($info, $filter, $before = '', $after = ''){
 function company_info( $field ){
   global $post;
 
-  if( $details = get_theme_mod( 'company_details', false ) && CONTACTS_SLUG == get_post_type( $post ) ){
-    $all_data = get_post_meta( $post->ID, '_'.CONTACTS_SLUG, true );
-    return isset($all_data[ $field ]) ? $all_data[ $field ] : '';
-  }
+  // if( $details = get_theme_mod( 'company_details', false ) && CONTACTS_SLUG == get_post_type( $post ) ){
+  //   $all_data = get_post_meta( $post->ID, '_'.CONTACTS_SLUG, true );
+  //   return isset($all_data[ $field ]) ? $all_data[ $field ] : '';
+  // }
 
   return get_theme_mod( 'company_' . $field, '' );
 }
@@ -55,14 +56,14 @@ function get_company_number( $atts=false, $content=false, $shortcode='our_first_
   return company_format($info[ $fkey ], $atts['filter'], $atts['before'], $atts['after']);
 }
 
-add_shortcode('company', 'Contacts\company_info_shortcode');
-add_shortcode('phone', 'Contacts\get_company_number');
+add_shortcode('company', __NAMESPACE__ . '\company_info_shortcode');
+add_shortcode('phone', __NAMESPACE__ . '\get_company_number');
 
-// if ( 'true' == get_user_option( 'rich_editing' ) ) {
-  add_filter("mce_external_plugins", 'Contacts\mce_plugin');
-  add_filter("mce_buttons", 'Contacts\mce_button');
-  add_action("admin_head", 'Contacts\mce_enqueue');
-// }
+if ( 'true' == get_user_option( 'rich_editing' ) ) {
+  add_filter("mce_external_plugins", __NAMESPACE__ . '\mce_plugin');
+  add_filter("mce_buttons", __NAMESPACE__ . '\mce_button');
+  add_action("admin_head", __NAMESPACE__ . '\mce_enqueue');
+}
 
 
 /** Register Shortcode Button MCE */

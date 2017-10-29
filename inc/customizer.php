@@ -1,5 +1,6 @@
 <?php
-namespace Contacts;
+
+namespace CDevelopers\Contacts;
 
 if ( ! defined( 'ABSPATH' ) )
   exit; // Exit if accessed directly
