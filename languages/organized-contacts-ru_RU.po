@@ -1,0 +1,121 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin\n"
+"POT-Creation-Date: 2017-11-01 23:38+0400\n"
+"PO-Revision-Date: 2017-11-01 23:39+0400\n"
+"Last-Translator: \n"
+"Language-Team: NikolayS93 <NikolayS93@yandex.ru>\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ../.\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-KeywordsList: __;__e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: includes/classes\n"
+"X-Poedit-SearchPathExcluded-1: languages\n"
+"X-Poedit-SearchPathExcluded-2: .git\n"
+
+#: includes/customizer.php:12
+msgid "Your company name"
+msgstr "Название организации"
+
+#: includes/customizer.php:19
+msgid "Your company address"
+msgstr "Адресс вашей компании"
+
+#: includes/customizer.php:26 includes/shortcodes.php:126
+msgid "Phone numbers"
+msgstr "Номера телефонов"
+
+#: includes/customizer.php:33
+msgid "Email address"
+msgstr "Email адрес"
+
+#: includes/customizer.php:40
+msgid "Work time mode"
+msgstr "Режим работы"
+
+#: includes/customizer.php:47
+msgid "Social links"
+msgstr "Социальные сети"
+
+#: includes/customizer.php:58 includes/customizer.php:81
+msgid "Contacts"
+msgstr "Контакты"
+
+#: includes/customizer.php:59 includes/customizer.php:90
+msgid "Add you company's contacts"
+msgstr "Добавить контакты организации"
+
+#: includes/customizer.php:82
+msgid "Contacts information about your company"
+msgstr "Контактная информация  о вашей компании"
+
+#: includes/customizer.php:101
+msgid "Configuration"
+msgstr "Настройки"
+
+#: includes/customizer.php:102
+msgid "Set a general settings"
+msgstr "Установить общие настройки"
+
+#: includes/customizer.php:112
+msgid "Number of companies"
+msgstr "Количество компаний"
+
+#: includes/shortcodes.php:121
+msgid "Insert contact's company shortcode"
+msgstr "Вставить контактную информацию об организации"
+
+#: includes/shortcodes.php:122
+msgid "About organization"
+msgstr "О компании"
+
+#: includes/shortcodes.php:123
+msgid "Insert"
+msgstr "Вставить"
+
+#: includes/shortcodes.php:124
+msgid "Company name"
+msgstr "Название организации"
+
+#: includes/shortcodes.php:125
+msgid "Address"
+msgstr "Адрес"
+
+#: includes/shortcodes.php:127
+msgid "Email"
+msgstr "Email"
+
+#: includes/shortcodes.php:128
+msgid "Time work"
+msgstr "Режим работы"
+
+#: includes/shortcodes.php:129
+msgid "Socials"
+msgstr "Социальные сети"
+
+#: includes/shortcodes.php:130
+msgid "Filter"
+msgstr "Фильтр"
+
+#: includes/shortcodes.php:131
+msgid "Use none for disable default the_content"
+msgstr "Отключить стандартный the_content можно значением none"
+
+#: includes/shortcodes.php:132
+msgid "HTML before"
+msgstr "HTML до"
+
+#: includes/shortcodes.php:133
+msgid "HTML after"
+msgstr "HTML После"
+
+#: includes/shortcodes.php:134
+msgid "Organization"
+msgstr "Организация"

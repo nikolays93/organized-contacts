@@ -1,9 +1,10 @@
 <?php
+
 /*
-Plugin Name: Контакты (Organized Contacts)
-Plugin URI: https://github.com/nikolays93/organized-contacts/
-Description: Добавляет возможность управлять контактными данными используя шорткоды.
-Version: 2.1.1 alpha
+Plugin Name: Organized contacts
+Plugin URI: https://github.com/nikolays93
+Description:
+Version: 0.0.1
 Author: NikolayS93
 Author URI: https://vk.com/nikolays_93
 Author EMAIL: nikolayS93@ya.ru
@@ -14,12 +15,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 namespace CDevelopers\Contacts;
 
 if ( ! defined( 'ABSPATH' ) )
-  exit; // disable direct access
+    exit; // disable direct access
 
-// define('CONTACTS_DIR', rtrim(plugin_dir_path( __FILE__ ), '/') );
+define('OC_LANG', basename(__FILE__, '.php'));
 
-add_action( 'plugins_loaded', __NAMESPACE__ . '\Init' );
-function Init(){
-    require_once __DIR__ . '/inc/shortcodes.php';
-    require_once __DIR__ . '/inc/customizer.php';
-}
+load_plugin_textdomain( OC_LANG, false, basename(__DIR__) . '/languages/' );
+
+require_once __DIR__ . '/includes/shortcodes.php';
+require_once __DIR__ . '/includes/customizer.php';
