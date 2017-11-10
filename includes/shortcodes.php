@@ -129,6 +129,7 @@ function mce_enqueue() {
         'about_organization' => __('About organization', DOMAIN), // 'Информация о компании',
         'insert' => __('Insert', DOMAIN),
         'company_name' => __('Company name', DOMAIN),
+        'company_image' => __('Company iamge', DOMAIN),
         'address' => __('Address', DOMAIN),
         'phonenumbers' => __('Phone numbers', DOMAIN),
         'email' => __('Email', DOMAIN),

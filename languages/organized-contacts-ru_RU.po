@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin\n"
-"POT-Creation-Date: 2017-11-01 23:38+0400\n"
-"PO-Revision-Date: 2017-11-01 23:39+0400\n"
+"POT-Creation-Date: 2017-11-10 13:24+0400\n"
+"PO-Revision-Date: 2017-11-10 13:24+0400\n"
 "Last-Translator: \n"
 "Language-Team: NikolayS93 <NikolayS93@yandex.ru>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.7.7\n"
 "X-Poedit-Basepath: ../.\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -20,102 +20,110 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: languages\n"
 "X-Poedit-SearchPathExcluded-2: .git\n"
 
-#: includes/customizer.php:12
+#: includes/customizer.php:14
 msgid "Your company name"
 msgstr "Название организации"
 
-#: includes/customizer.php:19
+#: includes/customizer.php:24
+msgid "Your company image"
+msgstr "Изображение организации"
+
+#: includes/customizer.php:35
 msgid "Your company address"
 msgstr "Адресс вашей компании"
 
-#: includes/customizer.php:26 includes/shortcodes.php:126
+#: includes/customizer.php:42 includes/shortcodes.php:134
 msgid "Phone numbers"
 msgstr "Номера телефонов"
 
-#: includes/customizer.php:33
+#: includes/customizer.php:49
 msgid "Email address"
 msgstr "Email адрес"
 
-#: includes/customizer.php:40
+#: includes/customizer.php:56
 msgid "Work time mode"
 msgstr "Режим работы"
 
-#: includes/customizer.php:47
+#: includes/customizer.php:63
 msgid "Social links"
 msgstr "Социальные сети"
 
-#: includes/customizer.php:58 includes/customizer.php:81
+#: includes/customizer.php:74 includes/customizer.php:97
 msgid "Contacts"
 msgstr "Контакты"
 
-#: includes/customizer.php:59 includes/customizer.php:90
+#: includes/customizer.php:75 includes/customizer.php:106
 msgid "Add you company's contacts"
 msgstr "Добавить контакты организации"
 
-#: includes/customizer.php:82
+#: includes/customizer.php:98
 msgid "Contacts information about your company"
 msgstr "Контактная информация  о вашей компании"
 
-#: includes/customizer.php:101
+#: includes/customizer.php:117
 msgid "Configuration"
 msgstr "Настройки"
 
-#: includes/customizer.php:102
+#: includes/customizer.php:118
 msgid "Set a general settings"
 msgstr "Установить общие настройки"
 
-#: includes/customizer.php:112
+#: includes/customizer.php:128
 msgid "Number of companies"
 msgstr "Количество компаний"
 
-#: includes/shortcodes.php:121
+#: includes/shortcodes.php:128
 msgid "Insert contact's company shortcode"
 msgstr "Вставить контактную информацию об организации"
 
-#: includes/shortcodes.php:122
+#: includes/shortcodes.php:129
 msgid "About organization"
 msgstr "О компании"
 
-#: includes/shortcodes.php:123
+#: includes/shortcodes.php:130
 msgid "Insert"
 msgstr "Вставить"
 
-#: includes/shortcodes.php:124
+#: includes/shortcodes.php:131
 msgid "Company name"
 msgstr "Название организации"
 
-#: includes/shortcodes.php:125
+#: includes/shortcodes.php:132
+msgid "Company iamge"
+msgstr "Изображение организации"
+
+#: includes/shortcodes.php:133
 msgid "Address"
 msgstr "Адрес"
 
-#: includes/shortcodes.php:127
+#: includes/shortcodes.php:135
 msgid "Email"
 msgstr "Email"
 
-#: includes/shortcodes.php:128
+#: includes/shortcodes.php:136
 msgid "Time work"
 msgstr "Режим работы"
 
-#: includes/shortcodes.php:129
+#: includes/shortcodes.php:137
 msgid "Socials"
 msgstr "Социальные сети"
 
-#: includes/shortcodes.php:130
+#: includes/shortcodes.php:138
 msgid "Filter"
 msgstr "Фильтр"
 
-#: includes/shortcodes.php:131
+#: includes/shortcodes.php:139
 msgid "Use none for disable default the_content"
 msgstr "Отключить стандартный the_content можно значением none"
 
-#: includes/shortcodes.php:132
+#: includes/shortcodes.php:140
 msgid "HTML before"
 msgstr "HTML до"
 
-#: includes/shortcodes.php:133
+#: includes/shortcodes.php:141
 msgid "HTML after"
 msgstr "HTML После"
 
-#: includes/shortcodes.php:134
+#: includes/shortcodes.php:142
 msgid "Organization"
 msgstr "Организация"
