@@ -15,6 +15,20 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
         'section'  => $section,
     ) );
 
+    $wp_customize->add_setting($company_id . '_company_image');
+    $wp_customize->add_control(
+       new \WP_Customize_Image_Control(
+         $wp_customize,
+         $company_id . '_company_image',
+         array(
+             'label'      => __('Your company image', DOMAIN),
+             'section'    => $section,
+             'settings'   => $company_id . '_company_image',
+             'context'    => 'your_setting_context'
+             )
+         )
+     );
+
     $wp_customize->add_setting($company_id . '_company_address');
     $wp_customize->add_control($company_id . '_company_address', array(
         'type'     => 'textarea',

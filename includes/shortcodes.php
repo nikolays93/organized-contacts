@@ -30,6 +30,13 @@ function company_format_filter($info, $filter = null, $before = '', $after = '')
  * @return string
  */
 function company_info( $field, $company_id = 'primary' ){
+    if( 'image' == $field ) {
+        if( $src = get_theme_mod( $company_id . '_company_' . $field, '' ) ) {
+            return sprintf('<img src="%s" alt="" />', esc_attr( $src ) );
+        }
+
+        return '';
+    }
     return get_theme_mod( $company_id . '_company_' . $field, '' );
 }
 
