@@ -118,19 +118,19 @@ function mce_enqueue() {
     ) );
 
     wp_localize_script( 'company_shortcode', 'company_localize', array(
-        'addButton_title' => __('Insert contact\'s company shortcode', OC_LANG),
-        'about_organization' => __('About organization', OC_LANG), // 'Информация о компании',
-        'insert' => __('Insert', OC_LANG),
-        'company_name' => __('Company name', OC_LANG),
-        'address' => __('Address', OC_LANG),
-        'phonenumbers' => __('Phone numbers', OC_LANG),
-        'email' => __('Email', OC_LANG),
-        'time_work' => __('Time work', OC_LANG),
-        'socials' => __('Socials', OC_LANG),
-        'filter' => __('Filter', OC_LANG),
-        'howdisablefilter' => __('Use none for disable default the_content', OC_LANG),
-        'htmlbefore' => __('HTML before', OC_LANG),
-        'htmlafter' => __('HTML after', OC_LANG),
-        'organization' => __('Organization', OC_LANG),
+        'addButton_title' => __('Insert contact\'s company shortcode', DOMAIN),
+        'about_organization' => __('About organization', DOMAIN), // 'Информация о компании',
+        'insert' => __('Insert', DOMAIN),
+        'company_name' => __('Company name', DOMAIN),
+        'address' => __('Address', DOMAIN),
+        'phonenumbers' => __('Phone numbers', DOMAIN),
+        'email' => __('Email', DOMAIN),
+        'time_work' => __('Time work', DOMAIN),
+        'socials' => __('Socials', DOMAIN),
+        'filter' => __('Filter', DOMAIN),
+        'howdisablefilter' => __('Use none for disable default the_content', DOMAIN),
+        'htmlbefore' => __('HTML before', DOMAIN),
+        'htmlafter' => __('HTML after', DOMAIN),
+        'organization' => __('Organization', DOMAIN),
     ) );
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace CDevelopers\Contacts;
+
 if ( ! defined( 'ABSPATH' ) )
   exit; // disable direct access
 
@@ -9,54 +11,54 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
     $wp_customize->add_setting($company_id . '_company_name');
     $wp_customize->add_control($company_id . '_company_name', array(
         'type'     => 'text',
-        'label'    => __('Your company name', OC_LANG), //'Название организации',
+        'label'    => __('Your company name', DOMAIN), //'Название организации',
         'section'  => $section,
     ) );
 
     $wp_customize->add_setting($company_id . '_company_address');
     $wp_customize->add_control($company_id . '_company_address', array(
         'type'     => 'textarea',
-        'label'    => __('Your company address', OC_LANG), //'Адрес',
+        'label'    => __('Your company address', DOMAIN), //'Адрес',
         'section'  => $section,
         ) );
 
     $wp_customize->add_setting($company_id . '_company_numbers');
     $wp_customize->add_control($company_id . '_company_numbers', array(
         'type'     => 'textarea',
-        'label'    => __('Phone numbers', OC_LANG), //'Номера телефонов',
+        'label'    => __('Phone numbers', DOMAIN), //'Номера телефонов',
         'section'  => $section,
     ) );
 
     $wp_customize->add_setting($company_id . '_company_email');
     $wp_customize->add_control($company_id . '_company_email', array(
         'type'     => 'text',
-        'label'    => __('Email address', OC_LANG), // 'Email адрес',
+        'label'    => __('Email address', DOMAIN), // 'Email адрес',
         'section'  => $section,
     ) );
 
     $wp_customize->add_setting($company_id . '_company_time_work');
     $wp_customize->add_control($company_id . '_company_time_work', array(
         'type'     => 'textarea',
-        'label'    => __('Work time mode', OC_LANG), // 'Режим работы',
+        'label'    => __('Work time mode', DOMAIN), // 'Режим работы',
         'section'  => $section,
     ) );
 
     $wp_customize->add_setting($company_id . '_company_socials');
     $wp_customize->add_control($company_id . '_company_socials', array(
         'type'     => 'textarea',
-        'label'    => __('Social links', OC_LANG), // 'Социальные сети',
+        'label'    => __('Social links', DOMAIN), // 'Социальные сети',
         'section'  => $section,
         ) );
 }
 
-add_action( 'customize_register', 'customizer' );
+add_action( 'customize_register', __NAMESPACE__ . '\customizer' );
 function customizer($wp_customize) {
     if( 1 >= $count = get_theme_mod('companies_count', 1) ) {
         $wp_customize->add_section( 'company_contacts', array(
             'priority'       => 40,
             'capability'     => 'edit_theme_options',
-            'title'          => __('Contacts', OC_LANG),
-            'description'    => __('Add you company\'s contacts', OC_LANG), // 'Добавьте информации о своей организации',
+            'title'          => __('Contacts', DOMAIN),
+            'description'    => __('Add you company\'s contacts', DOMAIN), // 'Добавьте информации о своей организации',
         ) );
 
         add_company_fields( $wp_customize, 'primary', true );
@@ -78,8 +80,8 @@ function customizer($wp_customize) {
             'priority'       => 60,
             'capability'     => 'edit_theme_options',
             'theme_supports' => '',
-            'title'          => __('Contacts', OC_LANG),
-            'description'    => __( 'Contacts information about your company', OC_LANG),
+            'title'          => __('Contacts', DOMAIN),
+            'description'    => __( 'Contacts information about your company', DOMAIN),
         ) );
 
         foreach ($organizations as $company_id => $company) {
@@ -87,7 +89,7 @@ function customizer($wp_customize) {
                 'priority'       => 10,
                 'capability'     => 'edit_theme_options',
                 'title'          => __($company),
-                'description'    =>  __('Add you company\'s contacts', OC_LANG), // 'Добавьте информации о своей организации',
+                'description'    =>  __('Add you company\'s contacts', DOMAIN), // 'Добавьте информации о своей организации',
                 'panel'  => 'Contacts',
             ) );
 
@@ -98,8 +100,8 @@ function customizer($wp_customize) {
             'priority'       => 30,
             'capability'     => 'edit_theme_options',
             'theme_supports' => '',
-            'title'          => __('Configuration', OC_LANG),
-            'description'    =>  __('Set a general settings', OC_LANG),
+            'title'          => __('Configuration', DOMAIN),
+            'description'    =>  __('Set a general settings', DOMAIN),
             'panel'  => 'Contacts',
         ) );
 
@@ -109,7 +111,7 @@ function customizer($wp_customize) {
     $wp_customize->add_setting('companies_count');
     $wp_customize->add_control('companies_count', array(
         'type'     => 'number',
-        'label'    => __('Number of companies', OC_LANG),//'Название организации',
+        'label'    => __('Number of companies', DOMAIN),//'Название организации',
         'section'  => $section,
         'input_attrs' => array(
             'min' => 1,

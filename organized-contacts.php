@@ -3,8 +3,8 @@
 /*
 Plugin Name: Organized contacts
 Plugin URI: https://github.com/nikolays93
-Description:
-Version: 0.0.1
+Description: The plugin allows you to organize information about your companies / organization
+Version: 1.0
 Author: NikolayS93
 Author URI: https://vk.com/nikolays_93
 Author EMAIL: nikolayS93@ya.ru
@@ -17,9 +17,9 @@ namespace CDevelopers\Contacts;
 if ( ! defined( 'ABSPATH' ) )
     exit; // disable direct access
 
-define('OC_LANG', basename(__FILE__, '.php'));
+const DOMAIN = 'organized-contacts';
 
-load_plugin_textdomain( OC_LANG, false, basename(__DIR__) . '/languages/' );
+load_plugin_textdomain( DOMAIN, false, DOMAIN . '/languages/' );
 
 require_once __DIR__ . '/includes/shortcodes.php';
 require_once __DIR__ . '/includes/customizer.php';
