@@ -5,6 +5,20 @@ namespace CDevelopers\Contacts;
 if ( ! defined( 'ABSPATH' ) )
   exit; // disable direct access
 
+function absolute_to_relative( $value ) {
+    $value = esc_url( $value );
+    $value = str_replace(get_site_url(), '', $value);
+
+    return $value;
+}
+
+function relative_to_absolute( $value ) {
+    if( is_string($value) )
+        $value = get_site_url() . $value;
+
+    return $value;
+}
+
 function add_company_fields(&$wp_customize, $company_id, $personal_section = false) {
     $section = $personal_section ? 'company_contacts' : $company_id . '_contact';
 
@@ -15,7 +29,10 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
         'section'  => $section,
     ) );
 
-    $wp_customize->add_setting($company_id . '_company_image');
+    $wp_customize->add_setting($company_id . '_company_image', array(
+        'sanitize_callback' => __NAMESPACE__ . '\absolute_to_relative',
+    ));
+
     $wp_customize->add_control(
        new \WP_Customize_Image_Control(
          $wp_customize,
@@ -24,7 +41,6 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
              'label'      => __('Your company image', DOMAIN),
              'section'    => $section,
              'settings'   => $company_id . '_company_image',
-             'context'    => 'your_setting_context'
              )
          )
      );
@@ -99,6 +115,7 @@ function customizer($wp_customize) {
         ) );
 
         foreach ($organizations as $company_id => $company) {
+            add_filter('theme_mod_' . $company_id . '_company_image', __NAMESPACE__ . '\relative_to_absolute');
             $wp_customize->add_section( $company_id . '_contact', array(
                 'priority'       => 10,
                 'capability'     => 'edit_theme_options',
