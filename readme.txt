@@ -45,5 +45,8 @@ for example:
 
 == Changelog ==
 
-1.0.1
+1.1
     - Add field "image"
+
+1.2
+    - Add sanitize "image" field - from relative to absolute
