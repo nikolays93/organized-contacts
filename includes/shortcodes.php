@@ -112,10 +112,15 @@ function mce_enqueue() {
             'fivefold'   => get_theme_mod( 'fivefold_company_name', 'Fivefold'),
         );
 
-        if( 1 <= ($advanced = $count - 5) ) {
-            for ($i=0; $i < $advanced; $i++) {
-                $company_id = 'company_' . ($i + 6);
-                $organizations[ $company_id ] = get_theme_mod( $company_id . '_company_name', ucfirst($company_id) );
+        if( 1 <= $count - 5 ) {
+            for ($i=6; $i <= $count; $i++) {
+                $company_id = "company_{$i}";
+                $company_name = ucfirst($company_id);
+
+                $organizations[ $company_id ] = get_theme_mod( $company_id . '_company_name', $company_name );
+                if( $company_name !== $organizations[ $company_id ]  ) {
+                    $organizations[ $company_id ] .= " ($i)";
+                }
             }
         }
         else {
