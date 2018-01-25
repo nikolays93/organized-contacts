@@ -17,7 +17,7 @@ The plugin allows you to organize information about your companies / organizatio
 Plugin will add customizer settings and [company] shortcode.
 Company shortcode has attrs:
     "id" (for muliple contacts) may be:
-        primary, secondary, tertiary, quaternary, fivefold
+        primary, secondary, tertiary, quaternary, fivefold, company_6, company_7, company_8.. etc..
 
     "field" may be
         name, image, address, numbers, email, time_work, socials
@@ -37,6 +37,8 @@ for example:
     [company field="email"]
         for primary only
 
+Tested on multyple sites.
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
@@ -45,8 +47,11 @@ for example:
 
 == Changelog ==
 
-1.1
-    - Add field "image"
+1.3
+    - Unlimited companies (It helped for me, and I think you will maybe find useful)
 
 1.2
     - Add sanitize "image" field - from relative to absolute
+
+1.1
+    - Add field "image"

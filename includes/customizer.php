@@ -104,7 +104,15 @@ function customizer($wp_customize) {
             'fivefold'   => get_theme_mod( 'fivefold_company_name', 'Fivefold'),
         );
 
-        $organizations = array_slice($organizations, 0, $count);
+        if( 1 <= ($advanced = $count - 5) ) {
+            for ($i=0; $i < $advanced; $i++) {
+                $company_id = 'company_' . ($i + 6);
+                $organizations[ $company_id ] = get_theme_mod( $company_id . '_company_name', ucfirst($company_id) );
+            }
+        }
+        else {
+            $organizations = array_slice($organizations, 0, $count);
+        }
 
         $wp_customize->add_panel( 'Contacts', array(
             'priority'       => 60,
@@ -146,7 +154,7 @@ function customizer($wp_customize) {
         'section'  => $section,
         'input_attrs' => array(
             'min' => 1,
-            'max' => 5,
+            'max' => 99,
         ),
     ) );
 }
