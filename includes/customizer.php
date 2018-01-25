@@ -22,7 +22,7 @@ function relative_to_absolute( $value ) {
 function add_company_fields(&$wp_customize, $company_id, $personal_section = false) {
     $section = $personal_section ? 'company_contacts' : $company_id . '_contact';
 
-    $wp_customize->add_setting($company_id . '_company_name');
+    $wp_customize->add_setting($company_id . '_company_name', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_name', array(
         'type'     => 'text',
         'label'    => __('Your company name', DOMAIN), //'Название организации',
@@ -31,6 +31,7 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
 
     $wp_customize->add_setting($company_id . '_company_image', array(
         'sanitize_callback' => __NAMESPACE__ . '\absolute_to_relative',
+        'transport' => 'postMessage'
     ));
 
     $wp_customize->add_control(
@@ -45,35 +46,35 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
          )
      );
 
-    $wp_customize->add_setting($company_id . '_company_address');
+    $wp_customize->add_setting($company_id . '_company_address', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_address', array(
         'type'     => 'textarea',
         'label'    => __('Your company address', DOMAIN), //'Адрес',
         'section'  => $section,
         ) );
 
-    $wp_customize->add_setting($company_id . '_company_numbers');
+    $wp_customize->add_setting($company_id . '_company_numbers', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_numbers', array(
         'type'     => 'textarea',
         'label'    => __('Phone numbers', DOMAIN), //'Номера телефонов',
         'section'  => $section,
     ) );
 
-    $wp_customize->add_setting($company_id . '_company_email');
+    $wp_customize->add_setting($company_id . '_company_email', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_email', array(
         'type'     => 'text',
         'label'    => __('Email address', DOMAIN), // 'Email адрес',
         'section'  => $section,
     ) );
 
-    $wp_customize->add_setting($company_id . '_company_time_work');
+    $wp_customize->add_setting($company_id . '_company_time_work', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_time_work', array(
         'type'     => 'textarea',
         'label'    => __('Work time mode', DOMAIN), // 'Режим работы',
         'section'  => $section,
     ) );
 
-    $wp_customize->add_setting($company_id . '_company_socials');
+    $wp_customize->add_setting($company_id . '_company_socials', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_socials', array(
         'type'     => 'textarea',
         'label'    => __('Social links', DOMAIN), // 'Социальные сети',
@@ -147,7 +148,10 @@ function customizer($wp_customize) {
         $section = 'contacts_settings';
     }
 
-    $wp_customize->add_setting('companies_count');
+    $wp_customize->add_setting('companies_count', array(
+        'default' => 1,
+        'transport' => 'postMessage'
+        ));
     $wp_customize->add_control('companies_count', array(
         'type'     => 'number',
         'label'    => __('Number of companies', DOMAIN),//'Название организации',
