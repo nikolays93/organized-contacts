@@ -133,21 +133,30 @@ function mce_enqueue() {
         $companies[] = (object) array('text' => $company, 'value' => $company_id);
     }
 
+    $arrFields = apply_filters( 'organized_contacts_mce_fields', array(
+        'name' => __('Company name', DOMAIN),
+        'image' => __('Company iamge', DOMAIN),
+        'address' => __('Address', DOMAIN),
+        'numbers' => __('Phone numbers', DOMAIN),
+        'email' => __('Email', DOMAIN),
+        'time_work' => __('Time work', DOMAIN),
+        'socials' => __('Socials', DOMAIN),
+    ) );
+
+    $fields = array();
+    foreach ($arrFields as $value => $text) {
+        $fields[] = (object) array('text' => $text, 'value' => $value);
+    }
+
     wp_localize_script( 'company_shortcode', 'company', array(
         'organizations' => $companies,
+        'fields' => $fields,
     ) );
 
     wp_localize_script( 'company_shortcode', 'company_localize', array(
         'addButton_title' => __('Insert contact\'s company shortcode', DOMAIN),
         'about_organization' => __('About organization', DOMAIN), // 'Информация о компании',
         'insert' => __('Insert', DOMAIN),
-        'company_name' => __('Company name', DOMAIN),
-        'company_image' => __('Company iamge', DOMAIN),
-        'address' => __('Address', DOMAIN),
-        'phonenumbers' => __('Phone numbers', DOMAIN),
-        'email' => __('Email', DOMAIN),
-        'time_work' => __('Time work', DOMAIN),
-        'socials' => __('Socials', DOMAIN),
         'filter' => __('Filter', DOMAIN),
         'howdisablefilter' => __('Use none for disable default the_content', DOMAIN),
         'htmlbefore' => __('HTML before', DOMAIN),

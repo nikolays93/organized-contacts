@@ -34,15 +34,7 @@
                 type  : 'listbox',
                 name  : 'field',
                 label : company_localize.insert,
-                values: [
-                {text: company_localize.company_name, value: 'name'},
-                {text: company_localize.company_image, value: 'image'},
-                {text: company_localize.address, value: 'address'},
-                {text: company_localize.phonenumbers, value: 'numbers'},
-                {text: company_localize.email, value: 'email'},
-                {text: company_localize.time_work, value: 'time_work'},
-                {text: company_localize.socials, value: 'socials'}
-                ],
+                values: company.fields,
                 value : values.field
             },
             {

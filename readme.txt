@@ -4,8 +4,8 @@ Contributors: Nikolays93
 Donate link: https://vk.com/nikolays_93
 Tags: organize, contacts
 Requires at least: 4.6
-Tested up to: 4.9.1
-Stable tag: 4.9.1
+Tested up to: 4.9.4
+Stable tag: 4.9.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
