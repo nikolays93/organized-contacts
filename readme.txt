@@ -37,7 +37,12 @@ for example:
     [company field="email"]
         for primary only
 
-Tested on multyple sites.
+for custom fields use:
+    new CDevelopers\Contacts\CustomControl('handle', array(
+        'type'  => 'text', // wp_customizer default types
+        'label' => '',     // Any title
+    ),
+    'Custom_Control'); // Set personal preregistred control classname
 
 == Installation ==
 
@@ -46,6 +51,10 @@ Tested on multyple sites.
 3. Use the Appearance > Customize screen to configure the contacts
 
 == Changelog ==
+
+1.4
+    - Add custom fields action with сonvenient class
+    - Set control priorities
 
 1.3
     - Unlimited companies (It helped for me, and I think you will maybe find useful)

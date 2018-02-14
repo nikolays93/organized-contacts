@@ -27,6 +27,7 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
         'type'     => 'text',
         'label'    => __('Your company name', DOMAIN), //'Название организации',
         'section'  => $section,
+        'priority' => 10,
     ) );
 
     $wp_customize->add_setting($company_id . '_company_image', array(
@@ -35,21 +36,23 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
     ));
 
     $wp_customize->add_control(
-       new \WP_Customize_Image_Control(
-         $wp_customize,
-         $company_id . '_company_image',
-         array(
-             'label'      => __('Your company image', DOMAIN),
-             'section'    => $section,
-             'settings'   => $company_id . '_company_image',
-             )
-         )
-     );
+        new \WP_Customize_Image_Control(
+            $wp_customize,
+            $company_id . '_company_image',
+            array(
+                'label'      => __('Your company image', DOMAIN),
+                'section'    => $section,
+                'priority'   => 20,
+                'settings'   => $company_id . '_company_image',
+            )
+        )
+    );
 
     $wp_customize->add_setting($company_id . '_company_address', array('transport' => 'postMessage'));
     $wp_customize->add_control($company_id . '_company_address', array(
         'type'     => 'textarea',
         'label'    => __('Your company address', DOMAIN), //'Адрес',
+        'priority' => 30,
         'section'  => $section,
         ) );
 
@@ -57,6 +60,7 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
     $wp_customize->add_control($company_id . '_company_numbers', array(
         'type'     => 'textarea',
         'label'    => __('Phone numbers', DOMAIN), //'Номера телефонов',
+        'priority' => 40,
         'section'  => $section,
     ) );
 
@@ -64,6 +68,7 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
     $wp_customize->add_control($company_id . '_company_email', array(
         'type'     => 'text',
         'label'    => __('Email address', DOMAIN), // 'Email адрес',
+        'priority' => 50,
         'section'  => $section,
     ) );
 
@@ -71,6 +76,7 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
     $wp_customize->add_control($company_id . '_company_time_work', array(
         'type'     => 'textarea',
         'label'    => __('Work time mode', DOMAIN), // 'Режим работы',
+        'priority' => 60,
         'section'  => $section,
     ) );
 
@@ -78,11 +84,14 @@ function add_company_fields(&$wp_customize, $company_id, $personal_section = fal
     $wp_customize->add_control($company_id . '_company_socials', array(
         'type'     => 'textarea',
         'label'    => __('Social links', DOMAIN), // 'Социальные сети',
+        'priority' => 70,
         'section'  => $section,
         ) );
+
+    do_action( 'add_company_custom_fields', $wp_customize, $section, $company_id );
 }
 
-add_action( 'customize_register', __NAMESPACE__ . '\customizer' );
+add_action( 'customize_register', __NAMESPACE__ . '\customizer', 10 );
 function customizer($wp_customize) {
     if( 1 >= $count = get_theme_mod('companies_count', 1) ) {
         $wp_customize->add_section( 'company_contacts', array(
@@ -160,6 +169,7 @@ function customizer($wp_customize) {
     $wp_customize->add_control('companies_count', array(
         'type'     => 'number',
         'label'    => __('Number of companies', DOMAIN),//'Название организации',
+        'priority' => '777',
         'section'  => $section,
         'input_attrs' => array(
             'min' => 1,
