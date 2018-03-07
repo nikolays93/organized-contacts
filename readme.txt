@@ -17,7 +17,7 @@ The plugin allows you to organize information about your companies / organizatio
 Plugin will add customizer settings and [company] shortcode.
 Company shortcode has attrs:
     "id" (for muliple contacts) may be:
-        primary, secondary, tertiary, quaternary, fivefold, company_6, company_7, company_8.. etc..
+        primary, secondary, company_6, company_7, company_8.. etc..
 
     "field" may be
         name, image, address, numbers, email, time_work, socials
@@ -51,6 +51,8 @@ for custom fields use:
 3. Use the Appearance > Customize screen to configure the contacts
 
 == Changelog ==
+1.5
+    - Global refactoring (warning: tertiary, quaternary, fivefold excluded )
 
 1.4
     - Add custom fields action with сonvenient class
