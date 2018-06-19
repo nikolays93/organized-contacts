@@ -56,6 +56,7 @@ for custom fields use:
     - Add Schema.org support
     - Explode address
     - Add multiple field with delimiter
+    - Add primary image home url filter
 
 1.5
     - Global refactoring (warning: tertiary, quaternary, fivefold excluded )

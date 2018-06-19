@@ -32,6 +32,7 @@ __('Primary', DOMAIN);
 __('Secondary', DOMAIN);
 
 require_once __DIR__ . '/includes/utils.php';
+require_once __DIR__ . '/includes/filters.php';
 require_once __DIR__ . '/includes/shortcodes.php';
 require_once __DIR__ . '/includes/mce.php';
 require_once __DIR__ . '/includes/custom-controls.php';
@@ -47,7 +48,7 @@ require_once __DIR__ . '/includes/customizer.php';
  * @param  before  text before
  * @param  after   text after
  */
-add_shortcode('company', __NAMESPACE__ . '\company_info_shortcode');
+add_shortcode('company', 'CDevelopers\Contacts\company_info_shortcode');
 
 /**
  * Add shortcode [phone]
@@ -59,30 +60,35 @@ add_shortcode('company', __NAMESPACE__ . '\company_info_shortcode');
  * @param  before  text before
  * @param  after   text after
  */
-add_shortcode('phone', __NAMESPACE__ . '\get_company_number');
+add_shortcode('phone', 'CDevelopers\Contacts\get_company_number');
 
 /**
  * Register customizer settings
  */
-add_action( 'customize_register', __NAMESPACE__ . '\customizer', 10 );
+add_action( 'customize_register', 'CDevelopers\Contacts\customizer', 10 );
 
 /**
  * Add mce scripts
  */
 // if ( user_can_richedit() ) {
-    add_filter("mce_external_plugins", __NAMESPACE__ . '\mce_plugin');
-    add_filter("mce_buttons", __NAMESPACE__ . '\mce_button');
-    add_action("admin_head", __NAMESPACE__ . '\mce_enqueue');
+    add_filter("mce_external_plugins", 'CDevelopers\Contacts\mce_plugin');
+    add_filter("mce_buttons", 'CDevelopers\Contacts\mce_button');
+    add_action("admin_head", 'CDevelopers\Contacts\mce_enqueue');
 // }
 
 /**
  * Add Schema.org marking
  */
-add_filter( 'company_info_field_filter', __NAMESPACE__ . '\schema_format_filter', 10, 2 );
-add_filter( 'company_info_summary_filter', __NAMESPACE__ . '\schema_format_summary_filter', 10, 2 );
+add_filter( 'company_info_field_filter', 'CDevelopers\Contacts\schema_format_filter', 10, 2 );
+add_filter( 'company_info_summary_filter', 'CDevelopers\Contacts\schema_format_summary_filter', 10, 2 );
 
 /**
  * Set default filters
  */
-add_filter( 'company_info_summary_filter', __NAMESPACE__ . '\company_concat_sides', 10, 2 );
-add_filter( 'company_info_summary_filter', __NAMESPACE__ . '\company_format_filter', 20, 2 );
+add_filter( 'company_info_summary_filter', 'CDevelopers\Contacts\company_concat_sides', 10, 2 );
+add_filter( 'company_info_summary_filter', 'CDevelopers\Contacts\company_format_filter', 20, 2 );
+
+/**
+ * Add link to home for logotype (image field)
+ */
+add_filter( 'company_info_field_filter', 'CDevelopers\Contacts\company_image_home_url', 20, 2 );
