@@ -21,6 +21,11 @@ const DOMAIN = 'organized-contacts';
 
 load_plugin_textdomain( DOMAIN, false, DOMAIN . '/languages/' );
 
+__('Organized contacts', DOMAIN);
+__('The plugin allows you to organize information about your companies / organization', DOMAIN);
+__('Primary', DOMAIN);
+__('Secondary', DOMAIN);
+
 require_once __DIR__ . '/includes/utils.php';
 require_once __DIR__ . '/includes/shortcodes.php';
 require_once __DIR__ . '/includes/mce.php';

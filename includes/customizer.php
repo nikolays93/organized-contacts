@@ -94,7 +94,7 @@ function customizer($wp_customize) {
     $organizations = get_companies();
     $count = sizeof( $organizations );
     $parent_menu_args = array(
-        'priority'       => 40,
+        'priority'       => 60,
         'capability'     => 'edit_theme_options',
         'title'          => __('Contacts', DOMAIN),
         'description'    => __('Add you company\'s contacts', DOMAIN), // 'Добавьте информации о своей организации',
@@ -109,27 +109,20 @@ function customizer($wp_customize) {
             'min' => 1,
             'max' => 99,
         ),
+        'section' => 'contacts_settings',
     );
 
-    $panel = '';
-    if( 1 >= $count ) {
-        $wp_customize->add_section( 'primary_contact', $parent_menu_args );
-    }
-    else {
-        $parent_menu_args['priority'] = 60;
-        $counter_args['section'] = 'contacts_settings';
-        $panel = 'Contacts';
-        $wp_customize->add_panel( $panel, $parent_menu_args );
+    $panel = 'Contacts';
+    $wp_customize->add_panel( $panel, $parent_menu_args );
 
-        $wp_customize->add_section( $counter_args['section'], array(
-            'priority'       => 30,
-            'capability'     => 'edit_theme_options',
-            'theme_supports' => '',
-            'title'          => __('Configuration', DOMAIN),
-            'description'    => __('Set a general settings', DOMAIN),
-            'panel'  => $panel,
-        ) );
-    }
+    $wp_customize->add_section( $counter_args['section'], array(
+        'priority'       => 30,
+        'capability'     => 'edit_theme_options',
+        'theme_supports' => '',
+        'title'          => __('Configuration', DOMAIN),
+        'description'    => __('Set a general settings', DOMAIN),
+        'panel'  => $panel,
+    ) );
 
     $wp_customize->add_setting('companies_count', array(
         'default' => 1,
@@ -139,15 +132,14 @@ function customizer($wp_customize) {
 
     foreach ($organizations as $company_id => $company) {
         add_filter('theme_mod_' . $company_id . '_company_image', __NAMESPACE__ . '\relative_to_absolute');
-        if( 1 < $count ) {
-            $wp_customize->add_section( $company_id . '_contact', array(
-                'priority'       => 10,
-                'capability'     => 'edit_theme_options',
-                'title'          => __($company),
-                'description'    =>  __('Add you company\'s contacts', DOMAIN), // 'Добавьте информации о своей организации',
-                'panel'  => $panel,
-            ) );
-        }
+
+        $wp_customize->add_section( $company_id . '_contact', array(
+            'priority'       => 10,
+            'capability'     => 'edit_theme_options',
+            'title'          => __(!empty($company) ? $company : mb_ucfirst( $company_id )),
+            'description'    =>  __('Add you company\'s contacts', DOMAIN), // 'Добавьте информации о своей организации',
+            'panel'  => $panel,
+        ) );
 
         add_company_fields( $wp_customize, $company_id, $company_id . '_contact' );
     }
