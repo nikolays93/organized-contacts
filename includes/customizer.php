@@ -89,7 +89,7 @@ function add_company_fields(&$wp_customize, $company_id, $section) {
     do_action( 'add_company_custom_fields', $wp_customize, $section, $company_id );
 }
 
-add_action( 'customize_register', __NAMESPACE__ . '\customizer', 10 );
+
 function customizer($wp_customize) {
     $organizations = get_companies();
     $count = sizeof( $organizations );

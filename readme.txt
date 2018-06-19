@@ -51,6 +51,9 @@ for custom fields use:
 3. Use the Appearance > Customize screen to configure the contacts
 
 == Changelog ==
+1.6
+    - Reorganize code
+
 1.5
     - Global refactoring (warning: tertiary, quaternary, fivefold excluded )
 
