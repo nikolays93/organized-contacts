@@ -4,8 +4,8 @@ Contributors: Nikolays93
 Donate link: https://vk.com/nikolays_93
 Tags: organize, contacts
 Requires at least: 4.6
-Tested up to: 4.9.4
-Stable tag: 4.9.4
+Tested up to: 4.9.5
+Stable tag: 4.9.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,9 +32,9 @@ Company shortcode has attrs:
         The some custom html
 
 for example:
-    [company id="secondary" field="address" filter="none" before="<span class='label'>Our address:</span>"]
+    [company id="secondary" field="email" filter="none" before="<span class='label'>Our email:</span>"]
         for muliple, or
-    [company field="email"]
+    [company field="city, address" del=" "]
         for primary only
 
 for custom fields use:
@@ -53,6 +53,9 @@ for custom fields use:
 == Changelog ==
 1.6
     - Reorganize code
+    - Add Schema.org support
+    - Explode address
+    - Add multiple field with delimiter
 
 1.5
     - Global refactoring (warning: tertiary, quaternary, fivefold excluded )

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin\n"
-"POT-Creation-Date: 2018-06-19 13:43+0400\n"
-"PO-Revision-Date: 2018-06-19 13:45+0400\n"
+"POT-Creation-Date: 2018-06-19 15:52+0400\n"
+"PO-Revision-Date: 2018-06-19 15:53+0400\n"
 "Last-Translator: \n"
 "Language-Team: NikolayS93 <NikolayS93@yandex.ru>\n"
 "Language: ru_RU\n"
@@ -29,48 +29,60 @@ msgid "Your company image"
 msgstr "Изображение организации"
 
 #: includes/customizer.php:52
+msgid "Your company city"
+msgstr "Город вашей компании"
+
+#: includes/customizer.php:60
 msgid "Your company address"
 msgstr "Адресс вашей компании"
 
-#: includes/customizer.php:60 includes/mce.php:62
+#: includes/customizer.php:68 includes/mce.php:62
 msgid "Phone numbers"
 msgstr "Номера телефонов"
 
-#: includes/customizer.php:68
+#: includes/customizer.php:76
 msgid "Email address"
 msgstr "Email адрес"
 
-#: includes/customizer.php:76
+#: includes/customizer.php:84
 msgid "Work time mode"
 msgstr "Режим работы"
 
-#: includes/customizer.php:84
+#: includes/customizer.php:92
 msgid "Social links"
 msgstr "Социальные сети"
 
-#: includes/customizer.php:99
-msgid "Contacts"
-msgstr "Контакты"
-
-#: includes/customizer.php:100 includes/customizer.php:140
-msgid "Add you company's contacts"
-msgstr "Добавить контакты организации"
-
-#: includes/customizer.php:104
-msgid "Number of companies"
-msgstr "Количество компаний"
-
-#: includes/customizer.php:105
-msgid "Changes will be applied after the page refresh"
-msgstr "Изменения применятся только после обновления страницы"
-
-#: includes/customizer.php:122
+#: includes/customizer.php:116
 msgid "Configuration"
 msgstr "Настройки"
 
-#: includes/customizer.php:123
+#: includes/customizer.php:117
 msgid "Set a general settings"
 msgstr "Установить общие настройки"
+
+#: includes/customizer.php:127
+msgid "Number of companies"
+msgstr "Количество компаний"
+
+#: includes/customizer.php:128
+msgid "Changes will be applied after the page refresh"
+msgstr "Изменения применятся только после обновления страницы"
+
+#: includes/customizer.php:143
+msgid "Use Schema.org"
+msgstr "Использовать Schema.org"
+
+#: includes/customizer.php:144
+msgid ""
+"Fields Shema.org wrap in <br><strong>itemscope itemtype=\"http://schema.org/"
+"Organization\"</strong>"
+msgstr ""
+"Поля Shema.org поместить в контейнер <br><strong>itemscope itemtype="
+"\"http://schema.org/Organization\"</strong>"
+
+#: includes/customizer.php:156
+msgid "Add you company's contacts"
+msgstr "Добавить контакты организации"
 
 #: includes/mce.php:59
 msgid "Company name"
@@ -128,11 +140,11 @@ msgstr "HTML После"
 msgid "Organization"
 msgstr "Организация"
 
-#: organized-contacts.php:24
+#: organized-contacts.php:28
 msgid "Organized contacts"
 msgstr "Организация контактов"
 
-#: organized-contacts.php:25
+#: organized-contacts.php:29
 msgid ""
 "The plugin allows you to organize information about your companies / "
 "organization"
@@ -140,11 +152,15 @@ msgstr ""
 "Этот плагин позволяет удобно хранить и выводить информацию о вашей "
 "компании / организации"
 
-#: organized-contacts.php:26
+#: organized-contacts.php:30
+msgid "Contacts"
+msgstr "Контакты"
+
+#: organized-contacts.php:31
 msgid "Primary"
 msgstr "Главный"
 
-#: organized-contacts.php:27
+#: organized-contacts.php:32
 msgid "Secondary"
 msgstr "Вторичный"
 
