@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plugin\n"
-"POT-Creation-Date: 2018-06-19 15:52+0400\n"
-"PO-Revision-Date: 2018-06-19 15:53+0400\n"
+"POT-Creation-Date: 2018-06-25 16:08+0400\n"
+"PO-Revision-Date: 2018-06-25 16:08+0400\n"
 "Last-Translator: \n"
 "Language-Team: NikolayS93 <NikolayS93@yandex.ru>\n"
 "Language: ru_RU\n"
@@ -73,12 +73,8 @@ msgid "Use Schema.org"
 msgstr "Использовать Schema.org"
 
 #: includes/customizer.php:144
-msgid ""
-"Fields Shema.org wrap in <br><strong>itemscope itemtype=\"http://schema.org/"
-"Organization\"</strong>"
-msgstr ""
-"Поля Shema.org поместить в контейнер <br><strong>itemscope itemtype="
-"\"http://schema.org/Organization\"</strong>"
+msgid "Fields Shema.org wrap in "
+msgstr "Поля Shema.org обернуть в "
 
 #: includes/customizer.php:156
 msgid "Add you company's contacts"
@@ -163,6 +159,13 @@ msgstr "Главный"
 #: organized-contacts.php:32
 msgid "Secondary"
 msgstr "Вторичный"
+
+#~ msgid ""
+#~ "Fields Shema.org wrap in <br><strong>itemscope itemtype=\"http://schema."
+#~ "org/Organization\"</strong>"
+#~ msgstr ""
+#~ "Поля Shema.org поместить в контейнер <br><strong>itemscope itemtype="
+#~ "\"http://schema.org/Organization\"</strong>"
 
 #~ msgid "Contacts information about your company"
 #~ msgstr "Контактная информация  о вашей компании"

@@ -141,7 +141,7 @@ function customizer($wp_customize) {
     $wp_customize->add_control('use_schema', array(
         'type'        => 'checkbox',
         'label'       => __('Use Schema.org', DOMAIN),
-        'description' => __('Fields Shema.org wrap in <br><strong>itemscope itemtype="http://schema.org/Organization"</strong>', DOMAIN),
+        'description' => __('Fields Shema.org wrap in ', DOMAIN) . '<br><strong>itemscope itemtype="http://schema.org/LocalBusiness"</strong>',
         'priority'    => '800',
         'section'     => 'contacts_settings',
     ));
