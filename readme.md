@@ -1,8 +1,8 @@
-== Organized Contacts ==
+## Organized Contacts ##
 
 The plugin allows you to organize information about your companies / organization
 
-== Description ==
+## Description ##
 
 Plugin will add customizer settings and [company] shortcode.
 Company shortcode has attrs:
@@ -34,13 +34,13 @@ for custom fields use:
     ),
     'Custom_Control'); // Set personal preregistred control classname
 
-== Installation ==
+## Installation ##
 
 1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Use the Appearance > Customize screen to configure the contacts
 
-== Changelog ==
+## Changelog ##
 1.6
     - Reorganize code
     - Add Schema.org support
