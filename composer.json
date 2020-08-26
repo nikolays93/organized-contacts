@@ -1,0 +1,14 @@
+{
+    "name": "nikolays93/organized.contacts",
+    "authors": [
+        {
+            "name": "NikolayS93",
+            "email": "nikolays93@ya.ru"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
+        "wp-coding-standards/wpcs": "2.*"
+    }
+}
