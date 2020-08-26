@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Organized contacts
  * Plugin URI: https://github.com/nikolays93/organized-contacts
- * Description: The plugin allows you to organize information about your companies / organizations
+ * Description: The plugin allows you to organize information about your companies / organization
  * Version: 2.0
  * Author: NikolayS93
  * Author URI: https://vk.com/nikolays_93
