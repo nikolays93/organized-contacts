@@ -1,6 +1,6 @@
 ## Organized Contacts ##
 
-The plugin allows you to organize information about your companies / organizations. Plugin will add customizer settings and [company] shortcode.
+The plugin allows you to organize information about your companies / organizations. Plugin will add customizer settings and [contact] shortcode.
 
 ### How to use ###
 
