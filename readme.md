@@ -4,7 +4,7 @@ The plugin allows you to organize information about your companies / organizatio
 
 ### How to use ###
 
-```
+```html
 <!-- Print contact name -->
 [contact field="name"]
 <!-- Print contact image -->
